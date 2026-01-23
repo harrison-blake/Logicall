@@ -15,20 +15,24 @@
     <div class="bg-white shadow overflow-hidden rounded-md">
       <ul class="divide-y divide-gray-200">
         <% @intakes.each do |intake| %>
-          <li class="px-4 py-4">
-            <div class="flex items-center justify-between">
-              <div>
-                <p class="text-sm font-medium text-gray-900"><%= intake.name %></p>
-                <p class="text-sm text-gray-500"><%= intake.email %> | <%= intake.phone_number %></p>
+          <%= link_to edit_intake_path(intake), class: "block" do %>
+            <li class="px-4 py-4 hover:bg-gray-50 cursor-pointer transition-colors">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-sm font-medium text-gray-900"><%= intake.name %></p>
+                  <p class="text-sm text-gray-500"><%= intake.email %> | <%= intake.phone_number %></p>
+                </div>
+                <% if intake.urgency.present? %>
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium <%= intake.urgency == 'high' ? 'bg-red-100 text-red-800' : 'bg-gray-100 text-gray-800' %>">
+                    <%= intake.urgency %>
+                  </span>
+                <% end %>
               </div>
-              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium <%= intake.urgency == 'high' ? 'bg-red-100 text-red-800' : 'bg-gray-100 text-gray-800' %>">
-                <%= intake.urgency %>
-              </span>
-            </div>
-            <% if intake.details.present? %>
-              <p class="mt-2 text-sm text-gray-600"><%= intake.details %></p>
-            <% end %>
-          </li>
+              <% if intake.details.present? %>
+                <p class="mt-2 text-sm text-gray-600"><%= intake.details %></p>
+              <% end %>
+            </li>
+          <% end %>
         <% end %>
       </ul>
     </div>

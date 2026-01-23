@@ -12,17 +12,26 @@
     <div class="bg-white shadow overflow-hidden rounded-md">
       <ul class="divide-y divide-gray-200">
         <% @tasks.each do |task| %>
-          <li class="px-4 py-4">
-            <div class="flex items-center justify-between">
-              <div>
-                <p class="text-sm font-medium text-gray-900"><%= task.subject %></p>
-                <p class="text-sm text-gray-500">From intake: <%= task.intake.name %></p>
+          <%= link_to edit_task_path(task), class: "block" do %>
+            <li class="px-4 py-4 hover:bg-gray-50 cursor-pointer transition-colors">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-sm font-medium text-gray-900"><%= task.subject %></p>
+                  <p class="text-sm text-gray-500">From intake: <%= task.intake.name %></p>
+                </div>
+                <div class="flex items-center gap-3">
+                  <% if task.urgency.present? %>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium <%= task.urgency == 'high' ? 'bg-red-100 text-red-800' : 'bg-gray-100 text-gray-800' %>">
+                      <%= task.urgency %>
+                    </span>
+                  <% end %>
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium <%= task.completed? ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' %>">
+                    <%= task.status %>
+                  </span>
+                </div>
               </div>
-              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium <%= task.completed? ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' %>">
-                <%= task.status %>
-              </span>
-            </div>
-          </li>
+            </li>
+          <% end %>
         <% end %>
       </ul>
     </div>

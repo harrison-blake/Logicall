@@ -17,8 +17,8 @@ Rails.application.routes.draw do
     resources :staff, only: [:new, :create]
   end
 
-  resources :intakes, only: [:index, :new, :create]
-  resources :tasks, only: [:index]
+  resources :intakes, only: [:index, :new, :create, :edit, :update]
+  resources :tasks, only: [:index, :edit, :update]
 
   get   "login", to: "sessions#new"
   post   "login", to: "sessions#create"

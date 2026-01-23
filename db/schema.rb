@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_01_23_173218) do
+ActiveRecord::Schema[8.0].define(version: 2026_01_23_215430) do
   create_table "accounts", force: :cascade do |t|
     t.string "industry"
     t.string "company_name"
@@ -29,6 +29,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_23_173218) do
     t.datetime "updated_at", null: false
     t.string "email"
     t.integer "status", default: 0
+    t.text "staff_notes"
   end
 
   create_table "tasks", force: :cascade do |t|
@@ -37,6 +38,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_23_173218) do
     t.integer "status", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "notes"
+    t.string "urgency"
     t.index ["intake_id"], name: "index_tasks_on_intake_id"
   end
 

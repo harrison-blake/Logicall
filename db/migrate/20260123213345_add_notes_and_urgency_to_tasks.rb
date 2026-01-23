@@ -1,0 +1,6 @@
+class AddNotesAndUrgencyToTasks < ActiveRecord::Migration[8.0]
+  def change
+    add_column :tasks, :notes, :text
+    add_column :tasks, :urgency, :string
+  end
+end
