@@ -4,10 +4,13 @@ class UsersController < ApplicationController
 	end
 
 	def create
-		user = User.new(user_params)
-		user.save!
-
-		redirect_to root_path
+		@user = User.new(user_params)
+		if @user.save
+			session[:current_user_id] = @user.id
+			redirect_to dashboard_path, notice: "Account created successfully."
+		else
+			render :new, status: :unprocessable_entity
+		end
 	end
 
 	private

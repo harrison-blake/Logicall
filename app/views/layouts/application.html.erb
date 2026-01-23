@@ -23,7 +23,24 @@
   </head>
 
   <body>
-    <main class="container mx-auto mt-28 px-5 flex">
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-xs p-4 z-50">
+      <% flash.each do |type, msg| %>
+        <% if type == 'notice' %>
+          <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50" role="alert">
+            <%= msg %>
+          </div>
+        <% elsif type == 'alert' %>
+          <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50" role="alert">
+            <%= msg %>
+          </div>
+        <% else %>
+           <div class="p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50" role="alert">
+            <%= msg %>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+    <main>
       <%= yield %>
     </main>
   </body>
