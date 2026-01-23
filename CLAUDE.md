@@ -52,20 +52,29 @@ Account (company/organization)
 └── fields: company_name, industry, phone_number, email
 
 User (belongs_to Account)
-├── roles: owner (0), admin (1), default (2)
-└── fields: email, name, password_digest, role
+├── roles: owner (0), admin (1), staff (2)
+└── fields: email, name, password_digest, role, password_reset_token, password_reset_sent_at
 
 Intake (patient intake form - not yet linked to accounts)
-└── fields: name, phone_number, email, details, urgency
+├── has_many :tasks
+├── status: pending (0), reviewed (1)
+└── fields: name, phone_number, email, details, urgency, status
+
+Task (belongs_to Intake)
+├── status: pending (0), completed (1)
+└── fields: intake_id, subject, status
 ```
 
 ### Route Structure
 
-- `/` - Public landing page
-- `/accounts/new` → `/accounts/:id/users/new` - Registration flow (account then user)
+- `/` - Public landing page (redirects to dashboard if authenticated)
+- `/accounts/new` → `/accounts/:id/users/new` - Registration flow (account then owner user)
+- `/accounts/:account_id/staff/new` - Add staff members (requires owner/admin)
 - `/login`, `/logout` - Session management
+- `/password_resets/:token/edit` - Password reset flow
 - `/dashboard` - Protected, requires authentication
-- `/intakes/new` - Patient intake form
+- `/intakes` - Patient intake list and form
+- `/tasks` - Task list
 
 ### Frontend Stack
 
