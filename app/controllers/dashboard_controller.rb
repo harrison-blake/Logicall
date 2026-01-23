@@ -2,6 +2,7 @@ class DashboardController < ApplicationController
   before_action :require_authentication
 
   def index
-    # This will be the logged-in user's dashboard
+    @intakes_count = Intake.count
+    @tasks_count = Task.count
   end
 end

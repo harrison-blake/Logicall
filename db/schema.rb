@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_01_23_061117) do
+ActiveRecord::Schema[8.0].define(version: 2026_01_23_173218) do
   create_table "accounts", force: :cascade do |t|
     t.string "industry"
     t.string "company_name"
@@ -28,6 +28,16 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_23_061117) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "email"
+    t.integer "status", default: 0
+  end
+
+  create_table "tasks", force: :cascade do |t|
+    t.integer "intake_id", null: false
+    t.string "subject"
+    t.integer "status", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["intake_id"], name: "index_tasks_on_intake_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -37,9 +47,12 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_23_061117) do
     t.datetime "updated_at", null: false
     t.string "password_digest"
     t.integer "account_id", null: false
-    t.integer "role"
+    t.integer "role", default: 2
+    t.string "password_reset_token"
+    t.datetime "password_reset_sent_at"
     t.index ["account_id"], name: "index_users_on_account_id"
   end
 
+  add_foreign_key "tasks", "intakes"
   add_foreign_key "users", "accounts"
 end

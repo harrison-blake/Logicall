@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  </head>
+
+  <body>
+    <p>Hi <%= @user.name %>,</p>
+
+    <p>You've been invited to join <%= @user.account.company_name %> on Logicall.</p>
+
+    <p>Click the link below to set your password and activate your account:</p>
+
+    <p><a href="<%= @url %>">Set Your Password</a></p>
+
+    <p>If you didn't expect this invitation, you can ignore this email.</p>
+  </body>
+</html>

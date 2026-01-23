@@ -14,11 +14,15 @@ Rails.application.routes.draw do
 
   resources :accounts, only: [:new, :create] do
     resources :users, only: [:new, :create]
+    resources :staff, only: [:new, :create]
   end
 
-  resources :intakes, only: [:new, :create]
+  resources :intakes, only: [:index, :new, :create]
+  resources :tasks, only: [:index]
 
   get   "login", to: "sessions#new"
   post   "login", to: "sessions#create"
   delete "logout", to: "sessions#destroy"
+
+  resources :password_resets, only: [:edit, :update], param: :token
 end

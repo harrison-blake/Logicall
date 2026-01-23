@@ -13,10 +13,8 @@ When you are prompted...
 - You will do the bare minimum that will solve the task. 
 
 ## TODO
-- Register new platform users and allow login
-- dashboard landing page after logging in
-- create intake form page
-- create tasks from intakes page
+- show amount of intakes on dashboard on a button or link that takes us to intakes index page
+- create tasks from intakes
 - ElevebLabs and Twilio Integration that will screen potential patient phone calls and store info in a database.
 - Front office ai agent that users can enable and it can help send emails, read intakes and create tasks from them.
 

@@ -1,4 +1,8 @@
 class IntakesController < ApplicationController
+  def index
+    @intakes = Intake.all
+  end
+
   def new
     @intake = Intake.new
   end

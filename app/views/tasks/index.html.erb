@@ -1,0 +1,32 @@
+<header class="bg-white shadow-sm">
+  <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+    <h1 class="text-lg font-semibold text-gray-900">
+      Tasks
+    </h1>
+    <%= link_to "Dashboard", dashboard_path, class: "text-sm text-blue-600 hover:text-blue-700" %>
+  </div>
+</header>
+
+<main class="container mx-auto mt-8 px-5">
+  <% if @tasks.any? %>
+    <div class="bg-white shadow overflow-hidden rounded-md">
+      <ul class="divide-y divide-gray-200">
+        <% @tasks.each do |task| %>
+          <li class="px-4 py-4">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm font-medium text-gray-900"><%= task.subject %></p>
+                <p class="text-sm text-gray-500">From intake: <%= task.intake.name %></p>
+              </div>
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium <%= task.completed? ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' %>">
+                <%= task.status %>
+              </span>
+            </div>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  <% else %>
+    <p class="text-gray-500">No tasks yet.</p>
+  <% end %>
+</main>
