@@ -1,14 +1,46 @@
-<div class="relative min-h-screen flex items-center justify-center">
+<div class="relative min-h-screen">
+  <!-- Login/Signup Links -->
   <div class="absolute top-4 right-4 space-x-4">
     <%= link_to "Log In", login_path, class: "text-blue-600 hover:text-blue-700" %>
-    <%= link_to "Sign Up", register_path, class: "text-blue-600 hover:text-blue-700" %>
+    <%= link_to "Sign Up", new_account_path, class: "text-blue-600 hover:text-blue-700" %>
   </div>
 
-  <div class="text-center max-w-2xl">
-    <h1 class="text-4xl font-bold mb-4">LOGICALL</h1>
-    <p class="text-lg text-gray-600">
-      An AI-powered front office assistant that handles calls, emails, and lead intake — 
-      with <strong class="text-gray-900">human oversight built in by default</strong>.
-    </p>
+  <!-- Hero Section -->
+  <div class="flex items-center justify-center pt-32 pb-16">
+    <div class="text-center max-w-2xl px-4">
+      <h1 class="text-4xl font-bold mb-4">LOGICALL</h1>
+      <p class="text-lg text-gray-600">
+        An AI-powered front office assistant that handles calls, emails, and lead intake — 
+        with <strong class="text-gray-900">human oversight built in by default</strong>.
+      </p>
+    </div>
   </div>
+
+  <!-- "You Stay in Control" Section -->
+  <section class="py-16 bg-gray-50">
+    <div class="container mx-auto px-4 text-center">
+      <h2 class="text-3xl font-bold mb-4">You Stay in Control</h2>
+      <p class="text-lg text-gray-600 max-w-3xl mx-auto mb-10">
+        Not an afterthought. LOGICALL never sends messages or executes actions without visibility.
+      </p>
+      <ul class="space-y-4 text-left inline-block max-w-md">
+        <li class="flex items-center">
+          <svg class="w-6 h-6 text-green-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+          <span>Drafts are always visible</span>
+        </li>
+        <li class="flex items-center">
+          <svg class="w-6 h-6 text-green-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+          <span>Actions are reviewable before execution</span>
+        </li>
+        <li class="flex items-center">
+          <svg class="w-6 h-6 text-green-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+          <span>Risky or destructive actions are blocked by default</span>
+        </li>
+        <li class="flex items-center">
+          <svg class="w-6 h-6 text-green-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+          <span>Automation runs only within your approved boundaries</span>
+        </li>
+      </ul>
+    </div>
+  </section>
 </div>
