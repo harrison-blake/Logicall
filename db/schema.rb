@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_01_23_054019) do
+ActiveRecord::Schema[8.0].define(version: 2026_01_23_061117) do
   create_table "accounts", force: :cascade do |t|
     t.string "industry"
     t.string "company_name"
@@ -25,7 +25,6 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_23_054019) do
     t.string "phone_number"
     t.string "details"
     t.string "urgency"
-    t.string "industry"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "email"
