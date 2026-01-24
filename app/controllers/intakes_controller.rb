@@ -11,7 +11,7 @@ class IntakesController < ApplicationController
   end
 
   def create
-    @intake = Intake.new(intake_params)
+    @intake = current_user.intakes.build(intake_params)
     if @intake.save
       redirect_to dashboard_path
     else

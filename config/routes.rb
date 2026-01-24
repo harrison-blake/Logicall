@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
   get "dashboard", to: "dashboard#index"
+  post "dashboard/chat", to: "dashboard#chat"
   root "pages#home"
 
   resources :accounts, only: [:new, :create] do

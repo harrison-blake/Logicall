@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_01_24_033046) do
+ActiveRecord::Schema[8.0].define(version: 2026_01_24_173100) do
   create_table "accounts", force: :cascade do |t|
     t.string "industry"
     t.string "company_name"
@@ -18,6 +18,15 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_24_033046) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "email"
+  end
+
+  create_table "assistant_logs", force: :cascade do |t|
+    t.string "action_type"
+    t.text "details"
+    t.integer "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_assistant_logs_on_user_id"
   end
 
   create_table "intakes", force: :cascade do |t|
@@ -30,6 +39,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_24_033046) do
     t.string "email"
     t.integer "status", default: 0
     t.text "staff_notes"
+    t.integer "user_id"
+    t.index ["user_id"], name: "index_intakes_on_user_id"
   end
 
   create_table "tasks", force: :cascade do |t|
@@ -52,6 +63,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_24_033046) do
     t.index ["account_id"], name: "index_users_on_account_id"
   end
 
+  add_foreign_key "assistant_logs", "users"
+  add_foreign_key "intakes", "users"
   add_foreign_key "tasks", "intakes"
   add_foreign_key "users", "accounts"
 end
