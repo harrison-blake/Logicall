@@ -1,55 +1,91 @@
-<div class="max-w-md mx-auto mt-16">
-  <h1 class="text-2xl font-semibold mb-2">Edit Intake</h1>
-  <p class="text-gray-600 mb-8">Update patient intake information.</p>
+<div class="max-w-4xl mx-auto mt-16 px-4">
+  <div class="mb-8">
+    <h1 class="text-2xl font-semibold mb-2">Edit Intake</h1>
+    <p class="text-gray-600">Update patient intake information.</p>
+  </div>
 
-  <%= form_with model: @intake, class: "space-y-6" do |form| %>
-    <% if @intake.errors.any? %>
-      <div class="text-sm text-red-600 space-y-1">
-        <% @intake.errors.full_messages.each do |message| %>
-          <p><%= message %></p>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <!-- Left Column: Intake Form -->
+    <div>
+      <%= form_with model: @intake, class: "space-y-6" do |form| %>
+        <% if @intake.errors.any? %>
+          <div class="text-sm text-red-600 space-y-1">
+            <% @intake.errors.full_messages.each do |message| %>
+              <p><%= message %></p>
+            <% end %>
+          </div>
+        <% end %>
+
+        <div>
+          <%= form.label :name, class: "block text-sm font-medium text-gray-700 mb-1" %>
+          <%= form.text_field :name, autofocus: true, class: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" %>
+        </div>
+
+        <div>
+          <%= form.label :phone_number, class: "block text-sm font-medium text-gray-700 mb-1" %>
+          <%= form.text_field :phone_number, class: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" %>
+        </div>
+
+        <div>
+          <%= form.label :email, class: "block text-sm font-medium text-gray-700 mb-1" %>
+          <%= form.email_field :email, class: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" %>
+        </div>
+
+        <div>
+          <%= form.label :details, "Patient request", class: "block text-sm font-medium text-gray-700 mb-1" %>
+          <%= form.text_area :details, rows: 4, class: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" %>
+        </div>
+
+        <div>
+          <%= form.label :urgency, class: "block text-sm font-medium text-gray-700 mb-1" %>
+          <%= form.select :urgency, [["Low", "low"], ["Medium", "medium"], ["High", "high"]], { include_blank: "Select urgency" }, class: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" %>
+        </div>
+
+        <div>
+          <%= form.label :status, class: "block text-sm font-medium text-gray-700 mb-1" %>
+          <%= form.select :status, [["Pending", "pending"], ["Reviewed", "reviewed"]], {}, class: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" %>
+        </div>
+
+        <div>
+          <%= form.label :staff_notes, "Staff notes", class: "block text-sm font-medium text-gray-700 mb-1" %>
+          <%= form.text_area :staff_notes, rows: 4, class: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" %>
+        </div>
+
+        <%= form.submit "Update Intake", class: "w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-colors cursor-pointer" %>
+      <% end %>
+    </div>
+
+    <!-- Right Column: Tasks -->
+    <div>
+      <div class="bg-white border border-gray-200 rounded-md p-4">
+        <h2 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Tasks</h2>
+
+        <% if @intake.tasks.any? %>
+          <ul class="space-y-2 mb-4">
+            <% @intake.tasks.each do |task| %>
+              <li class="flex items-center gap-2 text-sm p-2 rounded-md <%= task.completed? ? 'bg-green-50' : 'bg-gray-50' %>">
+                <%= form_with url: intake_task_path(@intake, task), method: :patch, class: "flex items-center gap-2 flex-1" do |f| %>
+                  <%= f.hidden_field :status, name: "task[status]", value: task.completed? ? "pending" : "completed" %>
+                  <%= f.submit task.completed? ? "✓" : "", class: "w-5 h-5 rounded border #{task.completed? ? 'bg-green-500 border-green-500 text-white' : 'bg-white border-gray-300'} cursor-pointer text-xs flex items-center justify-center" %>
+                  <span class="<%= 'text-green-700 line-through' if task.completed? %>"><%= task.subject %></span>
+                <% end %>
+              </li>
+            <% end %>
+          </ul>
+        <% else %>
+          <p class="text-sm text-gray-500 mb-4">No tasks yet.</p>
+        <% end %>
+
+        <!-- Add Task Form -->
+        <%= form_with url: intake_tasks_path(@intake), method: :post, class: "flex gap-2" do |f| %>
+          <%= f.text_field :subject, name: "task[subject]", placeholder: "Add a task...", class: "flex-1 px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" %>
+          <%= f.submit "Add", class: "px-3 py-2 text-sm bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md transition-colors cursor-pointer" %>
         <% end %>
       </div>
-    <% end %>
-
-    <div>
-      <%= form.label :name, class: "block text-sm font-medium text-gray-700 mb-1" %>
-      <%= form.text_field :name, autofocus: true, class: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" %>
     </div>
+  </div>
 
-    <div>
-      <%= form.label :phone_number, class: "block text-sm font-medium text-gray-700 mb-1" %>
-      <%= form.text_field :phone_number, class: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" %>
-    </div>
-
-    <div>
-      <%= form.label :email, class: "block text-sm font-medium text-gray-700 mb-1" %>
-      <%= form.email_field :email, class: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" %>
-    </div>
-
-    <div>
-      <%= form.label :details, "Patient request", class: "block text-sm font-medium text-gray-700 mb-1" %>
-      <%= form.text_area :details, rows: 4, class: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" %>
-    </div>
-
-    <div>
-      <%= form.label :urgency, class: "block text-sm font-medium text-gray-700 mb-1" %>
-      <%= form.select :urgency, [["Low", "low"], ["Medium", "medium"], ["High", "high"]], { include_blank: "Select urgency" }, class: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" %>
-    </div>
-
-    <div>
-      <%= form.label :status, class: "block text-sm font-medium text-gray-700 mb-1" %>
-      <%= form.select :status, [["Pending", "pending"], ["Reviewed", "reviewed"]], {}, class: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" %>
-    </div>
-
-    <div>
-      <%= form.label :staff_notes, "Staff notes", class: "block text-sm font-medium text-gray-700 mb-1" %>
-      <%= form.text_area :staff_notes, rows: 4, class: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" %>
-    </div>
-
-    <%= form.submit "Update Intake", class: "w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-colors" %>
-  <% end %>
-
-  <p class="mt-6 text-center">
+  <p class="mt-8 text-center">
     <%= link_to "Back to Intakes", intakes_path, class: "text-sm text-blue-600 hover:text-blue-700" %>
   </p>
 </div>

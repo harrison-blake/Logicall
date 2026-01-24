@@ -8,6 +8,9 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 
+Task.destroy_all
+Intake.destroy_all
+
 account = Account.find_or_create_by!(company_name: "Test Company") do |a|
   a.industry = "Healthcare"
   a.phone_number = "555-123-4567"
@@ -21,55 +24,9 @@ User.find_or_create_by!(email: "owner@test.com") do |u|
   u.role = :owner
 end
 
-intake1 = Intake.find_or_create_by!(name: "John Smith", email: "john.smith@example.com") do |i|
+Intake.find_or_create_by!(name: "John Smith", email: "john.smith@example.com") do |i|
   i.phone_number = "555-111-2222"
   i.details = "New patient requesting initial consultation for chronic back pain"
   i.urgency = "medium"
-  i.status = :reviewed
-end
-
-intake2 = Intake.find_or_create_by!(name: "Sarah Johnson", email: "sarah.j@example.com") do |i|
-  i.phone_number = "555-333-4444"
-  i.details = "Follow-up appointment needed for medication review"
-  i.urgency = "low"
-  i.status = :reviewed
-end
-
-intake3 = Intake.find_or_create_by!(name: "Mike Davis", email: "mike.davis@example.com") do |i|
-  i.phone_number = "555-555-6666"
-  i.details = "Urgent referral from ER for post-surgical care"
-  i.urgency = "high"
-  i.status = :reviewed
-end
-
-Intake.find_or_create_by!(name: "Emily Chen", email: "emily.chen@example.com") do |i|
-  i.phone_number = "555-777-8888"
-  i.details = "New patient inquiry about physical therapy options"
   i.status = :pending
-end
-
-Intake.find_or_create_by!(name: "Robert Williams", email: "r.williams@example.com") do |i|
-  i.phone_number = "555-999-0000"
-  i.details = "Requesting information about treatment plans for diabetes management"
-  i.status = :pending
-end
-
-Task.find_or_create_by!(intake: intake1, subject: "Verify insurance information") do |t|
-  t.status = :pending
-end
-
-Task.find_or_create_by!(intake: intake1, subject: "Schedule initial consultation") do |t|
-  t.status = :pending
-end
-
-Task.find_or_create_by!(intake: intake2, subject: "Request medical records from previous provider") do |t|
-  t.status = :pending
-end
-
-Task.find_or_create_by!(intake: intake3, subject: "Contact ER for discharge summary") do |t|
-  t.status = :pending
-end
-
-Task.find_or_create_by!(intake: intake3, subject: "Arrange urgent appointment slot") do |t|
-  t.status = :pending
 end

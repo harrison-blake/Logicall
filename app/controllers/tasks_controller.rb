@@ -1,30 +1,38 @@
 class TasksController < ApplicationController
   before_action :require_authentication
-  before_action :set_task, only: [:edit, :update]
+  before_action :set_intake, only: [:create, :update]
+  before_action :set_task, only: [:update]
 
   def index
     @tasks = Task.includes(:intake)
     @tasks = @tasks.where(status: params[:status]) if params[:status].present?
   end
 
-  def edit
+  def create
+    @task = @intake.tasks.build(task_params)
+    if @task.save
+      redirect_to edit_intake_path(@intake)
+    else
+      redirect_to edit_intake_path(@intake), alert: "Could not add task."
+    end
   end
 
   def update
-    if @task.update(task_params)
-      redirect_to tasks_path
-    else
-      render :edit, status: :unprocessable_entity
-    end
+    @task.update(task_params)
+    redirect_to edit_intake_path(@intake)
   end
 
   private
 
+  def set_intake
+    @intake = Intake.find(params[:intake_id])
+  end
+
   def set_task
-    @task = Task.find(params[:id])
+    @task = @intake.tasks.find(params[:id])
   end
 
   def task_params
-    params.require(:task).permit(:subject, :status, :notes, :urgency)
+    params.require(:task).permit(:subject, :status)
   end
 end
