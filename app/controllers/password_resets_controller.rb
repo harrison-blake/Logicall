@@ -6,7 +6,6 @@ class PasswordResetsController < ApplicationController
 
   def update
     if @user.update(password_params)
-      @user.update!(password_reset_token: nil, password_reset_sent_at: nil)
       session[:current_user_id] = @user.id
       redirect_to dashboard_path, notice: "Password set successfully."
     else
@@ -17,7 +16,7 @@ class PasswordResetsController < ApplicationController
   private
 
   def set_user
-    @user = User.find_by(password_reset_token: params[:token])
+    @user = User.find_by_token_for(:password_reset, params[:token])
     redirect_to login_path, alert: "Invalid or expired link." unless @user
   end
 

@@ -3,7 +3,7 @@ class IntakesController < ApplicationController
   before_action :set_intake, only: [:edit, :update]
 
   def index
-    @intakes = Intake.all
+    @intakes = params[:status].present? ? Intake.where(status: params[:status]) : Intake.all
   end
 
   def new

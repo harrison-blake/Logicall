@@ -18,10 +18,10 @@
         <div>
           <h3 class="text-xs font-medium text-red-600 uppercase tracking-wide mb-2">Pending</h3>
           <div class="grid grid-cols-2 gap-2">
-            <%= link_to intakes_path, class: "inline-flex items-center justify-center border border-red-500 text-red-600 hover:bg-red-50 font-medium py-2 px-4 rounded-md transition-colors" do %>
+            <%= link_to intakes_path(status: :pending), class: "inline-flex items-center justify-center border border-red-500 text-red-600 hover:bg-red-50 font-medium py-2 px-4 rounded-md transition-colors" do %>
               Intakes (<%= @pending_intakes_count %>)
             <% end %>
-            <%= link_to tasks_path, class: "inline-flex items-center justify-center border border-red-500 text-red-600 hover:bg-red-50 font-medium py-2 px-4 rounded-md transition-colors" do %>
+            <%= link_to tasks_path(status: :pending), class: "inline-flex items-center justify-center border border-red-500 text-red-600 hover:bg-red-50 font-medium py-2 px-4 rounded-md transition-colors" do %>
               Tasks (<%= @pending_tasks_count %>)
             <% end %>
           </div>
@@ -29,10 +29,10 @@
         <div>
           <h3 class="text-xs font-medium text-blue-600 uppercase tracking-wide mb-2">Reviewed</h3>
           <div class="grid grid-cols-2 gap-2">
-            <%= link_to intakes_path, class: "inline-flex items-center justify-center border border-blue-500 text-blue-600 hover:bg-blue-50 font-medium py-2 px-4 rounded-md transition-colors" do %>
+            <%= link_to intakes_path(status: :reviewed), class: "inline-flex items-center justify-center border border-blue-500 text-blue-600 hover:bg-blue-50 font-medium py-2 px-4 rounded-md transition-colors" do %>
               Intakes (<%= @reviewed_intakes_count %>)
             <% end %>
-            <%= link_to tasks_path, class: "inline-flex items-center justify-center border border-blue-500 text-blue-600 hover:bg-blue-50 font-medium py-2 px-4 rounded-md transition-colors" do %>
+            <%= link_to tasks_path(status: :completed), class: "inline-flex items-center justify-center border border-blue-500 text-blue-600 hover:bg-blue-50 font-medium py-2 px-4 rounded-md transition-colors" do %>
               Tasks (<%= @completed_tasks_count %>)
             <% end %>
           </div>

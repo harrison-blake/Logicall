@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_01_23_215430) do
+ActiveRecord::Schema[8.0].define(version: 2026_01_24_004721) do
   create_table "accounts", force: :cascade do |t|
     t.string "industry"
     t.string "company_name"
@@ -51,8 +51,6 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_23_215430) do
     t.string "password_digest"
     t.integer "account_id", null: false
     t.integer "role", default: 2
-    t.string "password_reset_token"
-    t.datetime "password_reset_sent_at"
     t.index ["account_id"], name: "index_users_on_account_id"
   end
 

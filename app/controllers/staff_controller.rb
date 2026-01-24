@@ -12,7 +12,6 @@ class StaffController < ApplicationController
     @user.password = SecureRandom.hex(16)
 
     if @user.save
-      @user.generate_password_reset_token!
       UserMailer.staff_invitation(@user).deliver_later
       redirect_to dashboard_path, notice: "Staff member added and invitation sent."
     else
