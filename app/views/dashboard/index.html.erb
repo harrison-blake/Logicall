@@ -1,89 +1,85 @@
-<header class="bg-white shadow-sm">
-  <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
-    <h1 class="text-lg font-semibold text-gray-900">
-      Dashboard
-    </h1>
-    <div class="flex items-center space-x-4">
-      <span class="text-sm text-gray-600">Welcome, <%= current_user.email %></span>
-      <%= link_to "Log Out", logout_path, class: "text-sm text-blue-600 hover:text-blue-700", data: { turbo_method: :delete } %>
+<div class="min-h-screen flex flex-col">
+  <nav class="flex justify-between items-center px-6 py-4 border-b border-gray-100">
+    <span class="text-sm font-medium tracking-wide">LOGICALL</span>
+    <div class="flex items-center gap-6 text-sm">
+      <span class="text-gray-500"><%= current_user.email %></span>
+      <%= link_to "Log out", logout_path, class: "text-gray-600 hover:text-gray-900", data: { turbo_method: :delete } %>
     </div>
-  </div>
-</header>
+  </nav>
 
-<main class="container mx-auto mt-8 px-5">
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-    <section>
-      <h2 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4">Activity</h2>
-      <div class="space-y-4">
-        <div>
-          <h3 class="text-xs font-medium text-red-600 uppercase tracking-wide mb-2">Pending</h3>
-          <div class="grid grid-cols-2 gap-2">
-            <%= link_to intakes_path(status: :pending), class: "inline-flex items-center justify-center border border-red-500 text-red-600 hover:bg-red-50 font-medium py-2 px-4 rounded-md transition-colors" do %>
-              Intakes (<%= @pending_intakes_count %>)
-            <% end %>
-            <%= link_to tasks_path(status: :pending), class: "inline-flex items-center justify-center border border-red-500 text-red-600 hover:bg-red-50 font-medium py-2 px-4 rounded-md transition-colors" do %>
-              Tasks (<%= @pending_tasks_count %>)
-            <% end %>
-          </div>
-        </div>
-        <div>
-          <h3 class="text-xs font-medium text-blue-600 uppercase tracking-wide mb-2">Reviewed</h3>
-          <div class="grid grid-cols-2 gap-2">
-            <%= link_to intakes_path(status: :reviewed), class: "inline-flex items-center justify-center border border-blue-500 text-blue-600 hover:bg-blue-50 font-medium py-2 px-4 rounded-md transition-colors" do %>
-              Intakes (<%= @reviewed_intakes_count %>)
-            <% end %>
-            <%= link_to tasks_path(status: :completed), class: "inline-flex items-center justify-center border border-blue-500 text-blue-600 hover:bg-blue-50 font-medium py-2 px-4 rounded-md transition-colors" do %>
-              Tasks (<%= @completed_tasks_count %>)
-            <% end %>
-          </div>
-        </div>
-      </div>
-    </section>
+  <main class="flex-1 px-6 py-8">
+    <div class="max-w-4xl mx-auto space-y-8">
 
-    <section>
-      <h2 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4">Actions</h2>
-      <div class="flex flex-wrap gap-2">
-        <%= link_to "New Patient Intake", new_intake_path, class: "inline-flex items-center justify-center min-w-32 border border-blue-600 text-blue-600 hover:bg-blue-50 font-medium py-2 px-4 rounded-md transition-colors" %>
+      <section class="flex flex-wrap gap-3">
+        <%= link_to new_intake_path, class: "text-sm bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded" do %>
+          New intake
+        <% end %>
         <% if current_user.owner? || current_user.admin? %>
-          <%= link_to "New Staff", new_account_staff_path(current_user.account), class: "inline-flex items-center justify-center min-w-32 border border-blue-600 text-blue-600 hover:bg-blue-50 font-medium py-2 px-4 rounded-md transition-colors" %>
+          <%= link_to new_account_staff_path(current_user.account), class: "text-sm border border-gray-300 text-gray-700 hover:bg-gray-50 py-2 px-4 rounded" do %>
+            Add staff
+          <% end %>
         <% end %>
-      </div>
-    </section>
-
-    <section data-controller="chat">
-      <h2 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4">AI Assistant</h2>
-      <div class="bg-white rounded-lg shadow p-4">
-        <div id="chat-messages" data-chat-target="messages" class="space-y-3 mb-4 h-48 overflow-y-auto">
-          <p class="text-gray-500 text-sm">Ask me about intakes, tasks, or anything else.</p>
-        </div>
-        <%= form_with url: dashboard_chat_path, method: :post, class: "flex gap-2", data: { action: "submit->chat#submit" } do |f| %>
-          <%= f.text_field :prompt,
-              placeholder: "e.g. Create tasks for John Smith",
-              class: "flex-1 rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500",
-              autocomplete: "off",
-              data: { chat_target: "input" } %>
-          <%= f.submit "Send", class: "bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md cursor-pointer text-sm" %>
+        <% if current_user.owner? %>
+          <%= link_to edit_account_path(current_user.account), class: "text-sm border border-gray-300 text-gray-700 hover:bg-gray-50 py-2 px-4 rounded" do %>
+            Settings
+          <% end %>
         <% end %>
-      </div>
-    </section>
+      </section>
 
-    <section>
-      <h2 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4">Assistant Log</h2>
-      <div class="bg-white rounded-lg shadow p-4">
-        <div id="action-log" class="space-y-2 h-48 overflow-y-auto">
-          <% if @recent_logs.any? %>
-            <% @recent_logs.each do |log| %>
-              <div class="text-xs border-l-2 border-blue-400 pl-2 py-1">
-                <span class="font-medium text-blue-600"><%= log.action_type %></span>
-                <p class="text-gray-600"><%= log.details %></p>
-                <p class="text-gray-400"><%= log.created_at.strftime("%b %d %H:%M") %></p>
-              </div>
-            <% end %>
-          <% else %>
-            <p class="text-gray-400 text-xs">Actions will appear here...</p>
+      <section>
+        <h2 class="text-sm text-gray-500 mb-3">Overview</h2>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <%= link_to intakes_path(status: :pending), class: "block p-4 border border-gray-200 rounded hover:border-gray-300" do %>
+            <div class="text-2xl font-semibold"><%= @pending_intakes_count %></div>
+            <div class="text-sm text-gray-500">Pending intakes</div>
+          <% end %>
+          <%= link_to tasks_path(status: :pending), class: "block p-4 border border-gray-200 rounded hover:border-gray-300" do %>
+            <div class="text-2xl font-semibold"><%= @pending_tasks_count %></div>
+            <div class="text-sm text-gray-500">Pending tasks</div>
+          <% end %>
+          <%= link_to intakes_path(status: :reviewed), class: "block p-4 border border-gray-200 rounded hover:border-gray-300" do %>
+            <div class="text-2xl font-semibold"><%= @reviewed_intakes_count %></div>
+            <div class="text-sm text-gray-500">Reviewed</div>
+          <% end %>
+          <%= link_to call_transcripts_path, class: "block p-4 border border-gray-200 rounded hover:border-gray-300" do %>
+            <div class="text-2xl font-semibold"><%= @call_transcripts_count %></div>
+            <div class="text-sm text-gray-500">Calls</div>
           <% end %>
         </div>
-      </div>
-    </section>
-  </div>
-</main>
+      </section>
+
+      <section data-controller="chat">
+        <h2 class="text-sm text-gray-500 mb-3">Assistant</h2>
+        <div class="border border-gray-200 rounded p-4">
+          <div id="chat-messages" data-chat-target="messages" class="space-y-3 mb-4 h-40 overflow-y-auto text-sm">
+            <p class="text-gray-400">Ask about intakes, tasks, or anything else.</p>
+          </div>
+          <%= form_with url: dashboard_chat_path, method: :post, class: "flex gap-2", data: { action: "submit->chat#submit" } do |f| %>
+            <%= f.text_field :prompt,
+                placeholder: "e.g. Create tasks for John Smith",
+                class: "flex-1 px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-blue-500",
+                autocomplete: "off",
+                data: { chat_target: "input" } %>
+            <%= f.submit "Send", class: "bg-blue-600 hover:bg-blue-700 text-white text-sm py-2 px-4 rounded cursor-pointer" %>
+          <% end %>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="text-sm text-gray-500 mb-3">Recent activity</h2>
+        <div class="border border-gray-200 rounded p-4">
+          <div id="action-log" class="h-32 overflow-y-auto text-xs text-gray-600 font-mono space-y-1">
+            <% if @recent_logs.any? %>
+              <% @recent_logs.each do |log| %>
+                <p><span class="text-gray-400"><%= log.created_at.strftime("%b %d %H:%M") %></span> <%= log.details %></p>
+              <% end %>
+            <% else %>
+              <p class="text-gray-400">Activity will appear here.</p>
+            <% end %>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+</div>

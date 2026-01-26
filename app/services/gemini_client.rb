@@ -75,8 +75,8 @@ class GeminiClient
     }
   }.freeze
 
-  def initialize(api_key = ENV["GEMINI_API_KEY"])
-    @api_key = "AIzaSyBzGLh28YxISwhfZ4fV0lgqAEOkYAoX9ts"
+  def initialize(api_key = Rails.application.credentials.dig(:gemini, :api_key))
+    @api_key = api_key
   end
 
   def chat(prompt)

@@ -1,46 +1,23 @@
-<div class="relative min-h-screen">
-  <!-- Login/Signup Links -->
-  <div class="absolute top-4 right-4 space-x-4">
-    <%= link_to "Log In", login_path, class: "text-blue-600 hover:text-blue-700" %>
-    <%= link_to "Sign Up", new_account_path, class: "text-blue-600 hover:text-blue-700" %>
-  </div>
-
-  <!-- Hero Section -->
-  <div class="flex items-center justify-center pt-32 pb-16">
-    <div class="text-center max-w-2xl px-4">
-      <h1 class="text-4xl font-bold mb-4">LOGICALL</h1>
-      <p class="text-lg text-gray-600">
-        An AI-powered front office assistant that handles calls, emails, and lead intake — 
-        with <strong class="text-gray-900">human oversight built in by default</strong>.
-      </p>
+<div class="min-h-screen flex flex-col">
+  <nav class="flex justify-between items-center px-6 py-4">
+    <span class="text-sm font-medium tracking-wide">LOGICALL</span>
+    <div class="flex gap-6 text-sm">
+      <%= link_to "Log in", login_path, class: "text-gray-600 hover:text-gray-900" %>
+      <%= link_to "Sign up", new_account_path, class: "text-blue-600 hover:text-blue-700" %>
     </div>
-  </div>
+  </nav>
 
-  <!-- "You Stay in Control" Section -->
-  <section class="py-16 bg-gray-50">
-    <div class="container mx-auto px-4 text-center">
-      <h2 class="text-3xl font-bold mb-4">You Stay in Control</h2>
-      <p class="text-lg text-gray-600 max-w-3xl mx-auto mb-10">
-        Not an afterthought. LOGICALL never sends messages or executes actions without visibility.
+  <main class="flex-1 flex items-center justify-center px-6">
+    <div class="max-w-md text-center">
+      <h1 class="text-2xl font-semibold mb-3">AI-powered front office</h1>
+      <p class="text-gray-600 mb-8">
+        Handles calls and intake with human oversight built in.
       </p>
-      <ul class="space-y-4 text-left inline-block max-w-md">
-        <li class="flex items-center">
-          <svg class="w-6 h-6 text-green-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-          <span>Drafts are always visible</span>
-        </li>
-        <li class="flex items-center">
-          <svg class="w-6 h-6 text-green-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-          <span>Actions are reviewable before execution</span>
-        </li>
-        <li class="flex items-center">
-          <svg class="w-6 h-6 text-green-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-          <span>Risky or destructive actions are blocked by default</span>
-        </li>
-        <li class="flex items-center">
-          <svg class="w-6 h-6 text-green-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-          <span>Automation runs only within your approved boundaries</span>
-        </li>
-      </ul>
+      <%= link_to "Get started", new_account_path, class: "inline-block bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2 px-6 rounded" %>
     </div>
-  </section>
+  </main>
+
+  <footer class="px-6 py-8 text-center text-sm text-gray-500">
+    <p>You stay in control. Actions are reviewable. Nothing runs without your approval.</p>
+  </footer>
 </div>

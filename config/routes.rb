@@ -13,7 +13,7 @@ Rails.application.routes.draw do
   post "dashboard/chat", to: "dashboard#chat"
   root "pages#home"
 
-  resources :accounts, only: [:new, :create] do
+  resources :accounts, only: [:new, :create, :edit, :update] do
     resources :users, only: [:new, :create]
     resources :staff, only: [:new, :create]
   end
@@ -22,10 +22,13 @@ Rails.application.routes.draw do
     resources :tasks, only: [:create, :update]
   end
   resources :tasks, only: [:index]
+  resources :call_transcripts, only: [:index, :show]
 
   get   "login", to: "sessions#new"
   post   "login", to: "sessions#create"
   delete "logout", to: "sessions#destroy"
 
   resources :password_resets, only: [:edit, :update], param: :token
+
+  post '/webhooks/elevenlabs', to: 'webhooks#elevenlabs_callback'
 end

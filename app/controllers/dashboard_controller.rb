@@ -6,6 +6,7 @@ class DashboardController < ApplicationController
     @pending_tasks_count = Task.pending.count
     @reviewed_intakes_count = Intake.reviewed.count
     @completed_tasks_count = Task.completed.count
+    @call_transcripts_count = current_user.account.call_transcripts.count
     @recent_logs = AssistantLog.order(created_at: :desc).limit(20)
   end
 
