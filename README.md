@@ -7,6 +7,18 @@ A Ruby on Rails front office platform for professionals to streamline customers.
 - Ruby 3.4.1
 - SQLite3
 
+## Integrations
+
+- **Twilio**: Phone number management for AI voice calls
+- **ElevenLabs**: AI voice agent with post-call transcript webhooks
+- **Gemini**: AI chat assistant on dashboard
+
+## Frontend
+
+- Hotwire (Turbo + Stimulus) for dynamic interactions
+- Tailwind CSS v4
+- ImportMap for JavaScript (no Node.js required)
+
 ## Setup
 
 ```bash
@@ -20,6 +32,12 @@ bin/rails db:seed
 # Start development server
 bin/dev
 ```
+Or run components separately:
+
+```bash
+bin/rails server
+bin/rails tailwindcss:watch
+```
 
 ## Localhost with Webhooks
 In order to test the Elevenlabs integration on dev, you'll need some sort of portforwarding mechanism to catch the webhook and direct it to localhost. I chose ngrok.
@@ -30,13 +48,6 @@ brew install ngrok
 #start ngrok on port 3000
 ngrok http 3000
 
-```
-
-Or run components separately:
-
-```bash
-bin/rails server
-bin/rails tailwindcss:watch
 ```
 
 ## Testing
@@ -85,14 +96,5 @@ bundle exec rspec spec/models/user_spec.rb:10 # Single test at line
 
 **Transcription to Intake**
 
-## Integrations
-
-- **Twilio**: Phone number management for AI voice calls
-- **ElevenLabs**: AI voice agent with post-call transcript webhooks
-- **Gemini**: AI chat assistant on dashboard
-
-## Frontend
-
-- Hotwire (Turbo + Stimulus) for dynamic interactions
-- Tailwind CSS v4
-- ImportMap for JavaScript (no Node.js required)
+## Dashboard View
+<img width="951" height="774" alt="image" src="https://github.com/user-attachments/assets/6a5018bd-9290-4b4a-a137-c1baa64aa805" />
