@@ -26,8 +26,9 @@ A Ruby on Rails front office platform for professionals to streamline customers.
 bundle install
 
 # Setup database
-bin/rails db:migrate
-bin/rails db:seed
+rails db:create
+rails db:migrate
+rails db:seed
 
 # Start development server
 bin/dev
@@ -35,7 +36,7 @@ bin/dev
 Or run components separately:
 
 ```bash
-bin/rails server
+rails server
 bin/rails tailwindcss:watch
 ```
 
