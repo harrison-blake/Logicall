@@ -8,7 +8,7 @@ class WebhooksController < ApplicationController
     return head :ok unless payload["type"] == "post_call_transcription"
 
     data = payload["data"] || {}
-    phone_number = extract_phone_number(data)
+    phone_number = extract_phone_number(data)&.gsub(/\D/, "") # strip non-digits
     account = Account.find_by(twilio_phone_number: phone_number)
 
     if account

@@ -69,7 +69,10 @@
         <h2 class="text-sm text-gray-500 mb-3">Recent activity</h2>
         <div class="border border-gray-200 rounded p-4">
           <div id="action-log" class="h-32 overflow-y-auto text-xs text-gray-600 font-mono space-y-1">
-            <% if @recent_logs.any? %>
+            <% if @recent_calls.any? || @recent_logs.any? %>
+              <% @recent_calls.each do |call| %>
+                <p><span class="text-gray-400"><%= call.created_at.strftime("%b %d %H:%M") %></span> Call from <%= call.caller_phone %> (<%= call.call_duration %>s)</p>
+              <% end %>
               <% @recent_logs.each do |log| %>
                 <p><span class="text-gray-400"><%= log.created_at.strftime("%b %d %H:%M") %></span> <%= log.details %></p>
               <% end %>
