@@ -21,6 +21,17 @@ bin/rails db:seed
 bin/dev
 ```
 
+## Localhost with Webhooks
+In order to test the Elevenlabs integration on dev, you'll need some sort of portforwarding mechanism to catch the webhook and direct it to localhost. I chose ngrok.
+```bash
+#install ngrok
+brew install ngrok
+
+#start ngrok on port 3000
+ngrok http 3000
+
+```
+
 Or run components separately:
 
 ```bash
