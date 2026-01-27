@@ -22,6 +22,9 @@ A Ruby on Rails front office platform for professionals to streamline customers.
 ## Setup
 
 ```bash
+# Clone the Repo
+git clone <repo_name>
+
 # Install dependencies
 bundle install
 
