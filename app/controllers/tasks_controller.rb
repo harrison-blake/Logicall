@@ -4,8 +4,9 @@ class TasksController < ApplicationController
   before_action :set_task, only: [:update]
 
   def index
-    @tasks = Task.includes(:intake)
+    @tasks = Task.includes(:intake).order(:intake_id, :created_at)
     @tasks = @tasks.where(status: params[:status]) if params[:status].present?
+    @tasks_by_intake = @tasks.group_by(&:intake)
   end
 
   def create
