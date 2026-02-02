@@ -1,29 +1,21 @@
-<header class="bg-white shadow-sm">
-  <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
-    <h1 class="text-lg font-semibold text-gray-900">
-      Phone Calls
-    </h1>
-    <%= link_to "Dashboard", dashboard_path, class: "text-sm text-blue-600 hover:text-blue-700" %>
-  </div>
-</header>
-
-<main class="container mx-auto mt-8 px-5">
+<div class="container mx-auto mt-8 px-5">
+  <h1 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-6">Phone Calls</h1>
   <% if @call_transcripts.any? %>
-    <div class="bg-white shadow overflow-hidden rounded-md">
-      <ul class="divide-y divide-gray-200">
+    <div class="bg-white dark:bg-gray-800 shadow overflow-hidden rounded-md">
+      <ul class="divide-y divide-gray-200 dark:divide-gray-700">
         <% @call_transcripts.each do |call| %>
           <%= link_to call_transcript_path(call), class: "block" do %>
-            <li class="px-4 py-4 hover:bg-gray-50 cursor-pointer transition-colors">
+            <li class="px-4 py-4 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer transition-colors">
               <div class="flex items-center justify-between">
                 <div>
-                  <p class="text-sm font-medium text-gray-900"><%= call.caller_phone || "Unknown caller" %></p>
-                  <p class="text-sm text-gray-500"><%= call.created_at.strftime("%b %d, %Y at %l:%M %p") %></p>
+                  <p class="text-sm font-medium text-gray-900 dark:text-gray-100"><%= call.caller_phone || "Unknown caller" %></p>
+                  <p class="text-sm text-gray-500 dark:text-gray-400"><%= call.created_at.strftime("%b %d, %Y at %l:%M %p") %></p>
                 </div>
                 <div class="flex items-center gap-3">
                   <% if call.call_duration %>
-                    <span class="text-sm text-gray-500"><%= call.call_duration %> sec</span>
+                    <span class="text-sm text-gray-500 dark:text-gray-400"><%= call.call_duration %> sec</span>
                   <% end %>
-                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium <%= call.completed? ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' %>">
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium <%= call.completed? ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200' : 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200' %>">
                     <%= call.status %>
                   </span>
                 </div>
@@ -34,6 +26,6 @@
       </ul>
     </div>
   <% else %>
-    <p class="text-gray-500">No phone calls yet.</p>
+    <p class="text-gray-500 dark:text-gray-400">No phone calls yet.</p>
   <% end %>
-</main>
+</div>

@@ -14,12 +14,12 @@ Rails.application.routes.draw do
   root "pages#home"
 
   resources :accounts, only: [:new, :create, :edit, :update] do
-    resources :users, only: [:new, :create]
+    resources :users, only: [:new, :create, :edit, :update]
     resources :staff, only: [:new, :create]
   end
 
   resources :intakes, only: [:index, :new, :create, :edit, :update] do
-    resources :tasks, only: [:create, :update]
+    resources :tasks, only: [:create, :update, :destroy]
   end
   resources :tasks, only: [:index]
   resources :call_transcripts, only: [:index, :show]

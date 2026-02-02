@@ -1,7 +1,7 @@
 class TasksController < ApplicationController
   before_action :require_authentication
-  before_action :set_intake, only: [:create, :update]
-  before_action :set_task, only: [:update]
+  before_action :set_intake, only: [:create, :update, :destroy]
+  before_action :set_task, only: [:update, :destroy]
 
   def index
     @tasks = Task.includes(:intake).order(:intake_id, :created_at)
@@ -21,6 +21,11 @@ class TasksController < ApplicationController
   def update
     @task.update(task_params)
     redirect_to edit_intake_path(@intake)
+  end
+
+  def destroy
+    @task.destroy
+    redirect_back fallback_location: tasks_path
   end
 
   private

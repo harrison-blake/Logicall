@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_01_25_231855) do
+ActiveRecord::Schema[8.0].define(version: 2026_02_02_171335) do
   create_table "accounts", force: :cascade do |t|
     t.string "industry"
     t.string "company_name"
@@ -20,6 +20,9 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_25_231855) do
     t.string "email"
     t.string "telnyx_phone_number"
     t.string "twilio_phone_number"
+    t.boolean "auto_process_transcripts", default: false
+    t.integer "default_intake_owner_id"
+    t.index ["default_intake_owner_id"], name: "index_accounts_on_default_intake_owner_id"
     t.index ["telnyx_phone_number"], name: "index_accounts_on_telnyx_phone_number", unique: true
     t.index ["twilio_phone_number"], name: "index_accounts_on_twilio_phone_number", unique: true
   end
@@ -42,7 +45,9 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_25_231855) do
     t.integer "status", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "intake_id"
     t.index ["account_id"], name: "index_call_transcripts_on_account_id"
+    t.index ["intake_id"], name: "index_call_transcripts_on_intake_id"
   end
 
   create_table "intakes", force: :cascade do |t|
@@ -79,8 +84,10 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_25_231855) do
     t.index ["account_id"], name: "index_users_on_account_id"
   end
 
+  add_foreign_key "accounts", "users", column: "default_intake_owner_id"
   add_foreign_key "assistant_logs", "users"
   add_foreign_key "call_transcripts", "accounts"
+  add_foreign_key "call_transcripts", "intakes"
   add_foreign_key "intakes", "users"
   add_foreign_key "tasks", "intakes"
   add_foreign_key "users", "accounts"

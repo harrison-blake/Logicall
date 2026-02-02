@@ -1,52 +1,53 @@
-<header class="bg-white shadow-sm">
-  <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
-    <h1 class="text-lg font-semibold text-gray-900">
-      Call Details
-    </h1>
-    <%= link_to "Back to Calls", call_transcripts_path, class: "text-sm text-blue-600 hover:text-blue-700" %>
+<div class="container mx-auto mt-8 px-5 max-w-3xl">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Call Details</h1>
+    <%= link_to "Back to Calls", call_transcripts_path, class: "text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300" %>
   </div>
-</header>
-
-<main class="container mx-auto mt-8 px-5 max-w-3xl">
-  <div class="bg-white shadow rounded-lg p-6">
+  <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
     <div class="grid grid-cols-2 gap-4 mb-6 text-sm">
       <div>
-        <span class="text-gray-500">Caller:</span>
+        <span class="text-gray-500 dark:text-gray-400">Caller:</span>
         <span class="font-medium ml-2"><%= @call_transcript.caller_phone || "Unknown" %></span>
       </div>
       <div>
-        <span class="text-gray-500">Duration:</span>
+        <span class="text-gray-500 dark:text-gray-400">Duration:</span>
         <span class="font-medium ml-2"><%= @call_transcript.call_duration || "N/A" %> seconds</span>
       </div>
       <div>
-        <span class="text-gray-500">Date:</span>
+        <span class="text-gray-500 dark:text-gray-400">Date:</span>
         <span class="font-medium ml-2"><%= @call_transcript.created_at.strftime("%b %d, %Y at %l:%M %p") %></span>
       </div>
       <div>
-        <span class="text-gray-500">Status:</span>
-        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ml-2 <%= @call_transcript.completed? ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' %>">
+        <span class="text-gray-500 dark:text-gray-400">Status:</span>
+        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ml-2 <%= @call_transcript.completed? ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200' : 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200' %>">
           <%= @call_transcript.status %>
         </span>
       </div>
+      <% if @call_transcript.intake.present? %>
+        <div>
+          <span class="text-gray-500 dark:text-gray-400">Intake:</span>
+          <%= link_to @call_transcript.intake.name, intake_path(@call_transcript.intake), class: "ml-2 text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium" %>
+        </div>
+      <% end %>
     </div>
 
-    <h2 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4">Transcript</h2>
+    <h2 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-4">Transcript</h2>
     <div class="space-y-4">
       <% if @call_transcript.transcript.present? %>
         <% transcript = @call_transcript.transcript.is_a?(String) ? JSON.parse(@call_transcript.transcript) : @call_transcript.transcript rescue @call_transcript.transcript %>
         <% if transcript.is_a?(Array) %>
           <% transcript.each do |turn| %>
-            <div class="<%= turn['role'] == 'agent' ? 'bg-blue-50 border-l-4 border-blue-400' : 'bg-gray-50 border-l-4 border-gray-400' %> p-3 rounded-r">
-              <p class="text-xs font-medium text-gray-500 mb-1"><%= turn['role']&.capitalize %></p>
-              <p class="text-sm text-gray-800"><%= turn['message'] %></p>
+            <div class="<%= turn['role'] == 'agent' ? 'bg-blue-50 dark:bg-blue-900 border-l-4 border-blue-400 dark:border-blue-500' : 'bg-gray-50 dark:bg-gray-700 border-l-4 border-gray-400 dark:border-gray-500' %> p-3 rounded-r">
+              <p class="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1"><%= turn['role']&.capitalize %></p>
+              <p class="text-sm text-gray-800 dark:text-gray-200"><%= turn['message'] %></p>
             </div>
           <% end %>
         <% else %>
-          <p class="text-sm text-gray-700 whitespace-pre-wrap"><%= transcript %></p>
+          <p class="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap"><%= transcript %></p>
         <% end %>
       <% else %>
-        <p class="text-gray-500">No transcript available.</p>
+        <p class="text-gray-500 dark:text-gray-400">No transcript available.</p>
       <% end %>
     </div>
   </div>
-</main>
+</div>

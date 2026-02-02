@@ -12,13 +12,17 @@ class WebhooksController < ApplicationController
     account = Account.find_by(twilio_phone_number: phone_number)
 
     if account
-      account.call_transcripts.create!(
+      call_transcript = account.call_transcripts.create!(
         conversation_id: data["conversation_id"],
         caller_phone: extract_caller_phone(data),
         transcript: extract_transcript(data),
         call_duration: data.dig("metadata", "call_duration_secs"),
         status: :completed
       )
+
+      if account.auto_process_transcripts?
+        ProcessTranscriptJob.perform_later(call_transcript)
+      end
     else
       Rails.logger.warn("No account found for phone number: #{phone_number}")
     end

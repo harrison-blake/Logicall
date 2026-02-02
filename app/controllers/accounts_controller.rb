@@ -1,7 +1,7 @@
 class AccountsController < ApplicationController
-  before_action :require_authentication, only: [:edit, :update]
-  before_action :require_owner, only: [:edit, :update]
-  before_action :set_account, only: [:edit, :update]
+  before_action :require_authentication, only: [ :edit, :update ]
+  before_action :require_owner, only: [ :edit, :update ]
+  before_action :set_account, only: [ :edit, :update ]
 
   def new
     @account = Account.new
@@ -38,6 +38,6 @@ class AccountsController < ApplicationController
   end
 
   def account_params
-    params.require(:account).permit(:company_name, :industry, :phone_number, :email, :twilio_phone_number)
+    params.require(:account).permit(:company_name, :industry, :phone_number, :email, :twilio_phone_number, :auto_process_transcripts, :default_intake_owner_id)
   end
 end

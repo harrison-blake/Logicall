@@ -4,6 +4,13 @@ require "json"
 class GeminiClient
   API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent".freeze
 
+  STANDARD_TASKS = [
+    "Call patient",
+    "Verify insurance",
+    "Schedule appointment",
+    "Request records"
+  ].freeze
+
   SYSTEM_INSTRUCTION = <<~PROMPT
     You are a helpful AI assistant for a healthcare front office platform.
     You can have normal conversations AND help with work tasks.
@@ -14,10 +21,11 @@ class GeminiClient
     - Intakes: Patient intake forms with details about why they're requesting an appointment.
     - Tasks: Action items for staff to complete for each intake.
 
-    When asked to create tasks for an intake, analyze the patient's details and create relevant,
-    specific tasks. For example:
-    - "chronic back pain" → tasks like "Request prior imaging records", "Verify insurance for specialist visit"
-    - "annual checkup" → tasks like "Send appointment confirmation email", "Prepare patient history summary"
+    IMPORTANT: When asked to create tasks for an intake, follow this 2-step process:
+    1. First call get_intakes to find the intake and review its details
+    2. Then call create_tasks_for_intake with the intake_id to create all standard tasks
+
+    The standard tasks created are: #{STANDARD_TASKS.join(", ")}.
   PROMPT
 
   TOOLS = {
@@ -53,24 +61,28 @@ class GeminiClient
         scope.includes(:intake).map { |t| { id: t.id, subject: t.subject, status: t.status, intake_name: t.intake.name } }
       }
     },
-    "create_task" => {
+    "create_tasks_for_intake" => {
       declaration: {
-        name: "create_task",
-        description: "Creates a new task for a specific intake. Use this when the user wants to add a task or action item for a patient.",
+        name: "create_tasks_for_intake",
+        description: "Creates all standard tasks for an intake. Call get_intakes first to find the intake, then use this to create tasks.",
         parameters: {
           type: "object",
           properties: {
-            intake_id: { type: "integer", description: "The ID of the intake to add the task to" },
-            subject: { type: "string", description: "The task description (e.g., 'Call patient', 'Verify insurance')" }
+            intake_id: { type: "integer", description: "The ID of the intake to create tasks for" }
           },
-          required: %w[intake_id subject]
+          required: %w[intake_id]
         }
       },
       execute: ->(args) {
         intake = Intake.find_by(id: args["intake_id"])
         return { error: "Intake not found" } unless intake
-        task = intake.tasks.create!(subject: args["subject"], status: :pending)
-        { success: true, task_id: task.id, subject: task.subject, intake_name: intake.name }
+
+        created_tasks = STANDARD_TASKS.map do |subject|
+          task = intake.tasks.create!(subject: subject, status: :pending)
+          { task_id: task.id, subject: task.subject }
+        end
+
+        { success: true, intake_name: intake.name, tasks_created: created_tasks }
       }
     }
   }.freeze
