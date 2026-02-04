@@ -1,5 +1,5 @@
 <div class="flex-1 px-6 py-8">
-    <div class="max-w-5xl mx-auto space-y-6">
+    <div class="max-w-7xl mx-auto space-y-6">
 
       <div class="flex flex-col lg:flex-row gap-6 lg:items-end">
         <section class="flex flex-row flex-wrap gap-2">
@@ -37,7 +37,7 @@
       </div>
 
       <div class="flex flex-col lg:flex-row gap-6">
-        <section class="lg:w-72">
+        <section class="lg:w-96">
           <h2 class="text-sm text-gray-500 dark:text-gray-400 mb-3">Agent activity</h2>
           <div class="border border-gray-200 dark:border-gray-700 rounded p-3 bg-gray-50 dark:bg-gray-800">
             <div id="action-log" class="h-80 overflow-y-auto text-xs text-gray-600 dark:text-gray-400 space-y-2">
@@ -64,7 +64,7 @@
         <section class="flex-1" data-controller="chat">
           <h2 class="text-sm text-gray-500 dark:text-gray-400 mb-3">Assistant</h2>
           <div class="border border-gray-200 dark:border-gray-700 rounded p-4">
-            <div id="chat-messages" data-chat-target="messages" class="space-y-3 mb-4 h-48 overflow-y-auto text-sm">
+            <div id="chat-messages" data-chat-target="messages" class="space-y-3 mb-4 h-80 overflow-y-auto text-sm">
               <p class="text-gray-400 dark:text-gray-500">Ask about intakes, tasks, or anything else.</p>
             </div>
             <%= form_with url: dashboard_chat_path, method: :post, class: "flex gap-2", data: { action: "submit->chat#submit" } do |f| %>

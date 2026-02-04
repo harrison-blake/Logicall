@@ -30,6 +30,23 @@ class IntakesController < ApplicationController
     end
   end
 
+  def import
+    return redirect_to intakes_path, alert: "Please upload a CSV file" unless params[:file].present?
+
+    require "csv"
+    file = params[:file]
+    CSV.foreach(file.path, headers: true) do |row|
+      current_user.intakes.create(
+        name: row["name"],
+        phone_number: row["phone_number"],
+        email: row["email"],
+        details: row["details"],
+        urgency: row["urgency"]
+      )
+    end
+    redirect_to intakes_path, notice: "Intakes imported successfully"
+  end
+
   private
 
   def set_intake

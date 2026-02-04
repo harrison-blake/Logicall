@@ -20,6 +20,9 @@ Rails.application.routes.draw do
 
   resources :intakes, only: [:index, :new, :create, :edit, :update] do
     resources :tasks, only: [:create, :update, :destroy]
+    collection do
+      post :import
+    end
   end
   resources :tasks, only: [:index]
   resources :call_transcripts, only: [:index, :show]
