@@ -16,6 +16,11 @@ Rails.application.routes.draw do
   resources :accounts, only: [:new, :create, :edit, :update] do
     resources :users, only: [:new, :create, :edit, :update]
     resources :staff, only: [:new, :create]
+    collection do
+      get :onboarding_settings
+      post :add_default_step
+      delete "remove_default_step/:id", action: :remove_default_step, as: :remove_default_step
+    end
   end
 
   resources :intakes, only: [:index, :new, :create, :edit, :update] do
@@ -25,6 +30,17 @@ Rails.application.routes.draw do
     end
   end
   resources :tasks, only: [:index]
+  resources :applicants, only: [:index, :new, :create, :edit, :update, :destroy] do
+    member do
+      patch :move
+    end
+    collection do
+      post :add_step
+      patch "toggle_step/:id", action: :toggle_step, as: :toggle_step
+      delete "remove_step/:id", action: :remove_step, as: :remove_step
+    end
+  end
+  get "applicant_portal", to: "applicant_portal#show"
   resources :call_transcripts, only: [:index, :show]
 
   get   "login", to: "sessions#new"

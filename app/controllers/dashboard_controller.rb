@@ -1,5 +1,6 @@
 class DashboardController < ApplicationController
   before_action :require_authentication
+  before_action :require_staff_role
 
   def index
     @pending_intakes_count = Intake.pending.count

@@ -11,6 +11,11 @@
               Add staff
             <% end %>
           <% end %>
+          <% if current_user.owner? %>
+            <%= link_to onboarding_settings_accounts_path, class: "text-sm border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 py-2 px-4 rounded text-center" do %>
+              Onboarding settings
+            <% end %>
+          <% end %>
         </section>
 
         <section class="flex-1">

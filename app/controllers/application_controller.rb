@@ -14,4 +14,10 @@ class ApplicationController < ActionController::Base
   def require_authentication
     redirect_to login_path, alert: "You must be logged in to do that." unless current_user
   end
+
+  def require_staff_role
+    if current_user&.applicant?
+      redirect_to applicant_portal_path, alert: "You are not authorized to access that page."
+    end
+  end
 end

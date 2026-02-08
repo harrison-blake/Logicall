@@ -1,5 +1,6 @@
 class CallTranscriptsController < ApplicationController
   before_action :require_authentication
+  before_action :require_staff_role
 
   def index
     @call_transcripts = current_user.account.call_transcripts.order(created_at: :desc)

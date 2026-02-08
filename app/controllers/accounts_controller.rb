@@ -1,6 +1,6 @@
 class AccountsController < ApplicationController
-  before_action :require_authentication, only: [ :edit, :update ]
-  before_action :require_owner, only: [ :edit, :update ]
+  before_action :require_authentication, only: [ :edit, :update, :onboarding_settings, :add_default_step, :remove_default_step ]
+  before_action :require_owner, only: [ :edit, :update, :onboarding_settings, :add_default_step, :remove_default_step ]
   before_action :set_account, only: [ :edit, :update ]
 
   def new
@@ -19,12 +19,29 @@ class AccountsController < ApplicationController
   def edit
   end
 
+  def onboarding_settings
+    @account = current_user.account
+    @default_onboarding_steps = @account.default_onboarding_steps.order(:position)
+  end
+
   def update
     if @account.update(account_params)
       redirect_to edit_account_path(@account), notice: "Account updated."
     else
       render :edit, status: :unprocessable_entity
     end
+  end
+
+  def add_default_step
+    @account = current_user.account
+    @account.default_onboarding_steps.create!(title: params[:title], position: @account.default_onboarding_steps.count)
+    redirect_to onboarding_settings_accounts_path
+  end
+
+  def remove_default_step
+    step = current_user.account.default_onboarding_steps.find(params[:id])
+    step.destroy
+    redirect_to onboarding_settings_accounts_path
   end
 
   private

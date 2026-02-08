@@ -1,5 +1,6 @@
 class IntakesController < ApplicationController
   before_action :require_authentication
+  before_action :require_staff_role
   before_action :set_intake, only: [:edit, :update]
 
   def index

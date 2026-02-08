@@ -1,5 +1,6 @@
 class TasksController < ApplicationController
   before_action :require_authentication
+  before_action :require_staff_role
   before_action :set_intake, only: [:create, :update, :destroy]
   before_action :set_task, only: [:update, :destroy]
 

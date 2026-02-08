@@ -1,0 +1,46 @@
+<div class="max-w-md mx-auto mt-16">
+  <h1 class="text-2xl font-semibold mb-2">Welcome, <%= current_user.name %></h1>
+  <p class="text-gray-600 dark:text-gray-400 mb-8">Your applicant portal.</p>
+
+  <% if @applicant %>
+    <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md p-6 space-y-4">
+      <div>
+        <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Position</p>
+        <p class="text-gray-900 dark:text-gray-100"><%= @applicant.position %></p>
+      </div>
+
+      <div>
+        <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Status</p>
+        <% status_colors = {
+          "applied" => "bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200",
+          "screening" => "bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200",
+          "interview" => "bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200",
+          "offer" => "bg-emerald-100 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-200",
+          "hired" => "bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200",
+          "rejected" => "bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200"
+        } %>
+        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium <%= status_colors[@applicant.status] %>">
+          <%= @applicant.status.humanize %>
+        </span>
+      </div>
+
+      <% if @applicant.onboarding_steps.any? %>
+        <div>
+          <p class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Onboarding Steps</p>
+          <ul class="space-y-2">
+            <% @applicant.onboarding_steps.order(:position).each do |step| %>
+              <li class="flex items-center gap-2 text-sm p-2 rounded-md <%= step.completed? ? 'bg-green-50 dark:bg-green-900/30' : 'bg-gray-50 dark:bg-gray-700' %>">
+                <span class="w-5 h-5 rounded border flex items-center justify-center text-xs <%= step.completed? ? 'bg-green-500 border-green-500 text-white' : 'bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600' %>">
+                  <%= step.completed? ? '&#10003;'.html_safe : '' %>
+                </span>
+                <span class="<%= step.completed? ? 'text-green-700 dark:text-green-300' : '' %>"><%= step.title %></span>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <p class="text-gray-500 dark:text-gray-400">No applicant profile found.</p>
+  <% end %>
+</div>
