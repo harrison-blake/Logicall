@@ -101,8 +101,6 @@ bundle exec rspec spec/models/user_spec.rb:10 # Single test at line
 6. Drag cards across columns (Applied, Screening, Interview, Offer, Hired, Rejected)
 7. Delete an applicant from their edit page if needed
 
-<img width="1907" height="462" alt="image" src="https://github.com/user-attachments/assets/c5fed280-83da-4fb3-bd5e-9e4e45a6ad7a" />
-
 ## Agent Flows
 
 **Create Task from Intake**
@@ -117,5 +115,4 @@ bundle exec rspec spec/models/user_spec.rb:10 # Single test at line
 ## Hiring Pipeline
 A Kanban-style board for managing the hiring workflow from application to onboarding. Candidates move through six stages — Applied, Screening, Interview, Offer, Hired, and Rejected — with drag-and-drop support. Each candidate has customizable onboarding steps that are auto-populated from account-level defaults and can be toggled, added, or removed individually.
 
-<!-- Add screenshot below -->
-
+<img width="1907" height="462" alt="image" src="https://github.com/user-attachments/assets/c5fed280-83da-4fb3-bd5e-9e4e45a6ad7a" />
