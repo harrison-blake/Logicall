@@ -101,6 +101,8 @@ bundle exec rspec spec/models/user_spec.rb:10 # Single test at line
 6. Drag cards across columns (Applied, Screening, Interview, Offer, Hired, Rejected)
 7. Delete an applicant from their edit page if needed
 
+<img width="1907" height="462" alt="image" src="https://github.com/user-attachments/assets/c5fed280-83da-4fb3-bd5e-9e4e45a6ad7a" />
+
 ## Agent Flows
 
 **Create Task from Intake**
