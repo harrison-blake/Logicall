@@ -92,6 +92,15 @@ bundle exec rspec spec/models/user_spec.rb:10 # Single test at line
 1. Go to intake edit page `/intakes/:id/edit`
 2. Fill in text field and click add task
 
+**Hiring Pipeline**
+1. Owner configures default onboarding steps in `/accounts/onboarding_settings`
+2. Staff clicks "Hiring" in nav to view the Kanban pipeline
+3. Click "New Applicant" to add an applicant (name, email, position)
+4. Default onboarding steps are auto-copied onto the new applicant
+5. Click an applicant card to edit details, toggle/add/remove onboarding steps
+6. Drag cards across columns (Applied, Screening, Interview, Offer, Hired, Rejected)
+7. Delete an applicant from their edit page if needed
+
 ## Agent Flows
 
 **Create Task from Intake**
@@ -102,3 +111,9 @@ bundle exec rspec spec/models/user_spec.rb:10 # Single test at line
 
 ## Dashboard View
 <img width="951" height="774" alt="image" src="https://github.com/user-attachments/assets/6a5018bd-9290-4b4a-a137-c1baa64aa805" />
+
+## Hiring Pipeline
+A Kanban-style board for managing the hiring workflow from application to onboarding. Candidates move through six stages — Applied, Screening, Interview, Offer, Hired, and Rejected — with drag-and-drop support. Each candidate has customizable onboarding steps that are auto-populated from account-level defaults and can be toggled, added, or removed individually.
+
+<!-- Add screenshot below -->
+
