@@ -8,8 +8,11 @@ class DashboardController < ApplicationController
     @reviewed_intakes_count = Intake.reviewed.count
     @completed_tasks_count = Task.completed.count
     @call_transcripts_count = current_user.account.call_transcripts.count
-    @recent_logs = AssistantLog.order(created_at: :desc).limit(20)
-    @recent_calls = current_user.account.call_transcripts.order(created_at: :desc).limit(5)
+  end
+
+  def activity
+    @recent_logs = AssistantLog.order(created_at: :desc).limit(50)
+    @recent_calls = current_user.account.call_transcripts.order(created_at: :desc).limit(20)
   end
 
   def chat

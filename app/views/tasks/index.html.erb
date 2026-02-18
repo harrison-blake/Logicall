@@ -1,36 +1,41 @@
-<div class="container mx-auto mt-8 px-5">
-  <h1 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-6">Tasks</h1>
-  <% if @tasks_by_intake.any? %>
-    <div class="space-y-6">
-      <% @tasks_by_intake.each do |intake, tasks| %>
-        <div class="bg-white dark:bg-gray-800 shadow overflow-hidden rounded-md">
-          <div class="px-4 py-3 bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
-            <%= link_to edit_intake_path(intake), class: "hover:text-blue-600 dark:hover:text-blue-400" do %>
-              <h2 class="text-sm font-medium text-gray-900 dark:text-gray-100"><%= intake.name %></h2>
-              <p class="text-xs text-gray-500 dark:text-gray-400"><%= intake.phone_number %></p>
-            <% end %>
+<div class="px-6 py-8">
+  <div class="max-w-4xl mx-auto">
+    <h1 class="text-xl font-semibold tracking-tight text-stone-900 dark:text-stone-100 mb-6">Tasks</h1>
+
+    <% if @tasks_by_intake.any? %>
+      <div class="space-y-4">
+        <% @tasks_by_intake.each do |intake, tasks| %>
+          <div class="bg-white dark:bg-stone-900 rounded-xl shadow-sm overflow-hidden">
+            <div class="px-5 py-3 border-b border-stone-100 dark:border-stone-800">
+              <%= link_to edit_intake_path(intake), class: "group" do %>
+                <h2 class="text-sm font-medium text-stone-900 dark:text-stone-100 group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors"><%= intake.name %></h2>
+                <p class="text-xs text-stone-400 dark:text-stone-500 mt-0.5"><%= intake.phone_number %></p>
+              <% end %>
+            </div>
+            <ul class="divide-y divide-stone-100 dark:divide-stone-800">
+              <% tasks.each do |task| %>
+                <li class="px-5 py-3 flex items-center justify-between">
+                  <p class="text-sm text-stone-700 dark:text-stone-300"><%= task.subject %></p>
+                  <div class="flex items-center gap-3">
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium <%= task.completed? ? 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400' : 'bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400' %>">
+                      <%= task.status %>
+                    </span>
+                    <%= button_to intake_task_path(intake, task), method: :delete, class: "text-stone-300 dark:text-stone-600 hover:text-rose-500 dark:hover:text-rose-400 transition-colors", data: { turbo_confirm: "Delete this task?" } do %>
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      </svg>
+                    <% end %>
+                  </div>
+                </li>
+              <% end %>
+            </ul>
           </div>
-          <ul class="divide-y divide-gray-200 dark:divide-gray-700">
-            <% tasks.each do |task| %>
-              <li class="px-4 py-3 flex items-center justify-between">
-                <p class="text-sm text-gray-900 dark:text-gray-100"><%= task.subject %></p>
-                <div class="flex items-center gap-2">
-                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium <%= task.completed? ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200' : 'bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200' %>">
-                    <%= task.status %>
-                  </span>
-                  <%= button_to intake_task_path(intake, task), method: :delete, class: "text-gray-400 hover:text-red-600 dark:hover:text-red-400", data: { turbo_confirm: "Delete this task?" } do %>
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                    </svg>
-                  <% end %>
-                </div>
-              </li>
-            <% end %>
-          </ul>
-        </div>
-      <% end %>
-    </div>
-  <% else %>
-    <p class="text-gray-500 dark:text-gray-400">No tasks yet.</p>
-  <% end %>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="text-center py-16">
+        <p class="text-sm text-stone-400 dark:text-stone-500">No tasks yet.</p>
+      </div>
+    <% end %>
+  </div>
 </div>

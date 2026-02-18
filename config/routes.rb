@@ -9,8 +9,10 @@ Rails.application.routes.draw do
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
+  get "settings", to: "settings#show"
   get "dashboard", to: "dashboard#index"
   post "dashboard/chat", to: "dashboard#chat"
+  get "activity", to: "dashboard#activity"
   root "pages#home"
 
   resources :accounts, only: [:new, :create, :edit, :update] do
@@ -34,6 +36,9 @@ Rails.application.routes.draw do
     member do
       patch :move
     end
+    member do
+      post :upload_attachments
+    end
     collection do
       post :add_step
       patch "toggle_step/:id", action: :toggle_step, as: :toggle_step
@@ -41,6 +46,7 @@ Rails.application.routes.draw do
     end
   end
   get "applicant_portal", to: "applicant_portal#show"
+  post "applicant_portal/upload", to: "applicant_portal#upload"
   resources :call_transcripts, only: [:index, :show]
 
   get   "login", to: "sessions#new"

@@ -1,44 +1,48 @@
-<div class="container mx-auto mt-8 px-5">
-  <h1 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-6">Intakes</h1>
-  <div class="mb-6 flex items-center justify-between">
-    <%= link_to "New Intake", new_intake_path, class: "inline-block bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-colors" %>
-    <%= form_with url: import_intakes_path, method: :post, local: true, class: "flex items-center gap-2" do |f| %>
-      <label class="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 font-medium py-2 px-4 rounded-md transition-colors cursor-pointer">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-        </svg>
-        Choose File
-        <%= f.file_field :file, accept: ".csv", class: "hidden", id: "csv_file_input" %>
-      </label>
-      <%= f.submit "Import CSV", class: "bg-emerald-600 hover:bg-emerald-700 hover:scale-105 text-white font-medium py-2 px-4 rounded-md transition-all cursor-pointer" %>
+<div class="px-6 py-8">
+  <div class="max-w-4xl mx-auto">
+    <div class="flex items-center justify-between mb-6">
+      <h1 class="text-xl font-semibold tracking-tight text-stone-900 dark:text-stone-100">Intakes</h1>
+      <div class="flex items-center gap-3">
+        <%= form_with url: import_intakes_path, method: :post, local: true, class: "flex items-center gap-2" do |f| %>
+          <label class="text-sm bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 text-stone-600 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-stone-800 py-2 px-4 rounded-lg font-medium transition-colors cursor-pointer">
+            Choose file
+            <%= f.file_field :file, accept: ".csv", class: "hidden", id: "csv_file_input" %>
+          </label>
+          <%= f.submit "Import CSV", class: "text-sm bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2 px-4 rounded-lg transition-colors cursor-pointer" %>
+        <% end %>
+        <%= link_to "New intake", new_intake_path, class: "text-sm bg-violet-600 hover:bg-violet-700 text-white font-medium py-2 px-4 rounded-lg transition-colors" %>
+      </div>
+    </div>
+
+    <% if @intakes.any? %>
+      <div class="bg-white dark:bg-stone-900 rounded-xl shadow-sm overflow-hidden">
+        <ul class="divide-y divide-stone-100 dark:divide-stone-800">
+          <% @intakes.each do |intake| %>
+            <%= link_to edit_intake_path(intake), class: "block" do %>
+              <li class="px-5 py-4 hover:bg-stone-50 dark:hover:bg-stone-800/50 transition-colors">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <p class="text-sm font-medium text-stone-900 dark:text-stone-100"><%= intake.name %></p>
+                    <p class="text-xs text-stone-400 dark:text-stone-500 mt-0.5"><%= intake.email %> &middot; <%= intake.phone_number %></p>
+                  </div>
+                  <% if intake.urgency.present? %>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium <%= intake.urgency == 'high' ? 'bg-rose-50 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400' : 'bg-stone-100 dark:bg-stone-800 text-stone-500 dark:text-stone-400' %>">
+                      <%= intake.urgency %>
+                    </span>
+                  <% end %>
+                </div>
+                <% if intake.details.present? %>
+                  <p class="mt-2 text-sm text-stone-500 dark:text-stone-400 line-clamp-1"><%= intake.details %></p>
+                <% end %>
+              </li>
+            <% end %>
+          <% end %>
+        </ul>
+      </div>
+    <% else %>
+      <div class="text-center py-16">
+        <p class="text-sm text-stone-400 dark:text-stone-500">No intakes yet.</p>
+      </div>
     <% end %>
   </div>
-  <% if @intakes.any? %>
-    <div class="bg-white dark:bg-gray-800 shadow overflow-hidden rounded-md">
-      <ul class="divide-y divide-gray-200 dark:divide-gray-700">
-        <% @intakes.each do |intake| %>
-          <%= link_to edit_intake_path(intake), class: "block" do %>
-            <li class="px-4 py-4 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer transition-colors">
-              <div class="flex items-center justify-between">
-                <div>
-                  <p class="text-sm font-medium text-gray-900 dark:text-gray-100"><%= intake.name %></p>
-                  <p class="text-sm text-gray-500 dark:text-gray-400"><%= intake.email %> | <%= intake.phone_number %></p>
-                </div>
-                <% if intake.urgency.present? %>
-                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium <%= intake.urgency == 'high' ? 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200' : 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200' %>">
-                    <%= intake.urgency %>
-                  </span>
-                <% end %>
-              </div>
-              <% if intake.details.present? %>
-                <p class="mt-2 text-sm text-gray-600 dark:text-gray-400"><%= intake.details %></p>
-              <% end %>
-            </li>
-          <% end %>
-        <% end %>
-      </ul>
-    </div>
-  <% else %>
-    <p class="text-gray-500 dark:text-gray-400">No intakes yet.</p>
-  <% end %>
 </div>

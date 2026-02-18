@@ -24,9 +24,12 @@ class UsersController < ApplicationController
 
   def update
     if @user.update(user_params)
-      redirect_to dashboard_path, notice: "Profile updated."
+      redirect_to settings_path(tab: "profile"), notice: "Profile updated."
     else
-      render :edit, status: :unprocessable_entity
+      @account = @user.account
+      @default_onboarding_steps = @account.default_onboarding_steps.order(:position)
+      @tab = "profile"
+      render "settings/show", status: :unprocessable_entity
     end
   end
 

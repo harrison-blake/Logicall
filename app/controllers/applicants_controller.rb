@@ -1,7 +1,7 @@
 class ApplicantsController < ApplicationController
   before_action :require_authentication
   before_action :require_staff_role
-  before_action :set_applicant, only: [:edit, :update, :move, :destroy]
+  before_action :set_applicant, only: [:edit, :update, :move, :destroy, :upload_attachments]
 
   def index
     @applicants = Applicant.includes(:user, :onboarding_steps).all
@@ -50,6 +50,15 @@ class ApplicantsController < ApplicationController
       head :ok
     else
       head :unprocessable_entity
+    end
+  end
+
+  def upload_attachments
+    if params[:attachments].present?
+      @applicant.attachments.attach(params[:attachments])
+      redirect_to edit_applicant_path(@applicant), notice: "Attachments uploaded."
+    else
+      redirect_to edit_applicant_path(@applicant), alert: "Please select files to upload."
     end
   end
 

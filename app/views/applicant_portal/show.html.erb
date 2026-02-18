@@ -1,46 +1,75 @@
-<div class="max-w-md mx-auto mt-16">
-  <h1 class="text-2xl font-semibold mb-2">Welcome, <%= current_user.name %></h1>
-  <p class="text-gray-600 dark:text-gray-400 mb-8">Your applicant portal.</p>
-
-  <% if @applicant %>
-    <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md p-6 space-y-4">
-      <div>
-        <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Position</p>
-        <p class="text-gray-900 dark:text-gray-100"><%= @applicant.position %></p>
-      </div>
-
-      <div>
-        <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Status</p>
-        <% status_colors = {
-          "applied" => "bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200",
-          "screening" => "bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200",
-          "interview" => "bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200",
-          "offer" => "bg-emerald-100 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-200",
-          "hired" => "bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200",
-          "rejected" => "bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200"
-        } %>
-        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium <%= status_colors[@applicant.status] %>">
-          <%= @applicant.status.humanize %>
-        </span>
-      </div>
-
-      <% if @applicant.onboarding_steps.any? %>
-        <div>
-          <p class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Onboarding Steps</p>
-          <ul class="space-y-2">
-            <% @applicant.onboarding_steps.order(:position).each do |step| %>
-              <li class="flex items-center gap-2 text-sm p-2 rounded-md <%= step.completed? ? 'bg-green-50 dark:bg-green-900/30' : 'bg-gray-50 dark:bg-gray-700' %>">
-                <span class="w-5 h-5 rounded border flex items-center justify-center text-xs <%= step.completed? ? 'bg-green-500 border-green-500 text-white' : 'bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600' %>">
-                  <%= step.completed? ? '&#10003;'.html_safe : '' %>
-                </span>
-                <span class="<%= step.completed? ? 'text-green-700 dark:text-green-300' : '' %>"><%= step.title %></span>
-              </li>
-            <% end %>
-          </ul>
-        </div>
-      <% end %>
+<div class="px-6 py-8">
+  <div class="max-w-md mx-auto">
+    <div class="mb-8">
+      <h1 class="text-2xl font-semibold tracking-tight text-stone-900 dark:text-stone-100 mb-1">Welcome, <%= current_user.name %></h1>
+      <p class="text-sm text-stone-400 dark:text-stone-500">Your applicant portal.</p>
     </div>
-  <% else %>
-    <p class="text-gray-500 dark:text-gray-400">No applicant profile found.</p>
-  <% end %>
+
+    <% if @applicant %>
+      <div class="space-y-5">
+        <div class="bg-white dark:bg-stone-900 rounded-xl shadow-sm p-5 space-y-4">
+          <div>
+            <p class="text-xs font-medium uppercase tracking-wider text-stone-400 dark:text-stone-500 mb-1">Position</p>
+            <p class="text-sm text-stone-900 dark:text-stone-100"><%= @applicant.position %></p>
+          </div>
+
+          <div>
+            <p class="text-xs font-medium uppercase tracking-wider text-stone-400 dark:text-stone-500 mb-1">Status</p>
+            <% status_colors = {
+              "applied" => "bg-violet-50 dark:bg-violet-900/30 text-violet-600 dark:text-violet-400",
+              "screening" => "bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400",
+              "interview" => "bg-sky-50 dark:bg-sky-900/30 text-sky-600 dark:text-sky-400",
+              "offer" => "bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400",
+              "hired" => "bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-400",
+              "rejected" => "bg-rose-50 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400"
+            } %>
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium <%= status_colors[@applicant.status] %>">
+              <%= @applicant.status.humanize %>
+            </span>
+          </div>
+        </div>
+
+        <div class="bg-white dark:bg-stone-900 rounded-xl shadow-sm p-5">
+          <p class="text-xs font-medium uppercase tracking-wider text-stone-400 dark:text-stone-500 mb-3">Attachments</p>
+          <% if @applicant.attachments.any? %>
+            <ul class="space-y-1.5 mb-4">
+              <% @applicant.attachments.each do |attachment| %>
+                <li class="flex items-center justify-between text-sm p-2.5 rounded-lg bg-stone-50 dark:bg-stone-800">
+                  <span class="text-stone-700 dark:text-stone-300"><%= attachment.filename %></span>
+                  <span class="text-xs text-stone-400 dark:text-stone-500 tabular-nums"><%= attachment.created_at.strftime("%b %d, %Y") %></span>
+                </li>
+              <% end %>
+            </ul>
+          <% end %>
+
+          <%= form_with url: applicant_portal_upload_path, method: :post, multipart: true, class: "flex gap-2 items-end" do |f| %>
+            <div class="flex-1">
+              <%= file_field_tag :attachments, multiple: true, class: "block w-full text-sm text-stone-500 dark:text-stone-400 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-violet-50 file:text-violet-700 dark:file:bg-violet-900/30 dark:file:text-violet-400 hover:file:bg-violet-100 dark:hover:file:bg-violet-900/50 file:cursor-pointer file:transition-colors" %>
+            </div>
+            <%= f.submit "Upload", class: "bg-violet-600 hover:bg-violet-700 text-white text-sm font-medium py-2 px-4 rounded-lg cursor-pointer transition-colors" %>
+          <% end %>
+        </div>
+
+        <% if @applicant.onboarding_steps.any? %>
+          <div class="bg-white dark:bg-stone-900 rounded-xl shadow-sm p-5">
+            <p class="text-xs font-medium uppercase tracking-wider text-stone-400 dark:text-stone-500 mb-3">Hiring steps</p>
+            <ul class="space-y-1.5">
+              <% @applicant.onboarding_steps.order(:position).each do |step| %>
+                <li class="flex items-center gap-2.5 text-sm p-2.5 rounded-lg <%= step.completed? ? 'bg-emerald-50 dark:bg-emerald-900/20' : 'bg-stone-50 dark:bg-stone-800' %>">
+                  <span class="w-5 h-5 rounded-md border flex items-center justify-center text-xs <%= step.completed? ? 'bg-emerald-500 border-emerald-500 text-white' : 'bg-white dark:bg-stone-900 border-stone-300 dark:border-stone-600' %>">
+                    <%= step.completed? ? '&#10003;'.html_safe : '' %>
+                  </span>
+                  <span class="<%= step.completed? ? 'text-emerald-700 dark:text-emerald-400' : 'text-stone-700 dark:text-stone-300' %>"><%= step.title %></span>
+                </li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="text-center py-16">
+        <p class="text-sm text-stone-400 dark:text-stone-500">No applicant profile found.</p>
+      </div>
+    <% end %>
+  </div>
 </div>

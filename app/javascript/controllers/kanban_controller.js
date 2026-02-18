@@ -1,34 +1,46 @@
 import { Controller } from "@hotwired/stimulus"
+import Sortable from "sortablejs"
 
 export default class extends Controller {
-  static targets = ["card"]
+  static targets = ["cardList", "column"]
 
-  dragstart(event) {
-    event.dataTransfer.setData("applicant-id", event.target.dataset.applicantId)
-    event.dataTransfer.effectAllowed = "move"
-    event.target.classList.add("opacity-50")
+  connect() {
+    this.cardListTargets.forEach(list => {
+      Sortable.create(list, {
+        group: "kanban",
+        animation: 150,
+        ghostClass: "opacity-30",
+        dragClass: "shadow-lg",
+        onEnd: this.onEnd.bind(this)
+      })
+    })
   }
 
-  dragend(event) {
-    event.target.classList.remove("opacity-50")
+  onEnd(event) {
+    const card = event.item
+    const applicantId = card.dataset.applicantId
+    const newStatus = event.to.closest("[data-status]").dataset.status
+    const oldStatus = event.from.closest("[data-status]").dataset.status
+
+    if (newStatus !== oldStatus) {
+      this.updateCounts(oldStatus, newStatus)
+      this.persistMove(applicantId, newStatus)
+    }
   }
 
-  dragover(event) {
-    event.preventDefault()
-    event.dataTransfer.dropEffect = "move"
-    event.currentTarget.classList.add("bg-blue-50", "dark:bg-blue-900/20")
+  updateCounts(oldStatus, newStatus) {
+    this.columnTargets.forEach(column => {
+      const status = column.dataset.status
+      const countEl = column.querySelector("[data-count]")
+      if (!countEl) return
+
+      const current = parseInt(countEl.textContent, 10)
+      if (status === oldStatus) countEl.textContent = current - 1
+      if (status === newStatus) countEl.textContent = current + 1
+    })
   }
 
-  dragleave(event) {
-    event.currentTarget.classList.remove("bg-blue-50", "dark:bg-blue-900/20")
-  }
-
-  drop(event) {
-    event.preventDefault()
-    event.currentTarget.classList.remove("bg-blue-50", "dark:bg-blue-900/20")
-
-    const applicantId = event.dataTransfer.getData("applicant-id")
-    const newStatus = event.currentTarget.dataset.status
+  persistMove(applicantId, newStatus) {
     const token = document.querySelector('meta[name="csrf-token"]').content
 
     fetch(`/applicants/${applicantId}/move`, {
@@ -38,12 +50,6 @@ export default class extends Controller {
         "X-CSRF-Token": token
       },
       body: `status=${newStatus}`
-    }).then(response => {
-      if (response.ok) {
-        const card = document.querySelector(`[data-applicant-id="${applicantId}"]`)
-        const dropzone = event.currentTarget.querySelector("[data-kanban-target='cardList']")
-        dropzone.appendChild(card)
-      }
     })
   }
 }

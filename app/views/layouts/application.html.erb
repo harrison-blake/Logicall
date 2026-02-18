@@ -10,68 +10,81 @@
 
     <%= yield :head %>
 
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
-
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
 
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+  <body class="bg-stone-50 dark:bg-stone-950 text-stone-800 dark:text-stone-200 antialiased">
     <% if current_user %>
-      <nav class="flex justify-between items-center px-6 py-4 border-b border-gray-100 dark:border-gray-700">
-        <div class="flex items-center gap-6">
-          <%= link_to "LOGICALL", current_user.applicant? ? applicant_portal_path : dashboard_path, class: "text-sm font-medium tracking-wide" %>
-          <% unless current_user.applicant? %>
-            <%= link_to "Hiring", applicants_path, class: "text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100" %>
-          <% end %>
-        </div>
-        <div class="relative" data-controller="dropdown">
-          <button type="button" data-action="click->dropdown#toggle" class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100">
-            <%= current_user.email %>
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-            </svg>
-          </button>
-          <div data-dropdown-target="menu" class="hidden absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded shadow-lg py-1 z-10">
-            <% if current_user.owner? %>
-              <%= link_to "Account settings", edit_account_path(current_user.account), class: "block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700" %>
+      <nav class="sticky top-0 z-40 backdrop-blur-md bg-white/80 dark:bg-stone-900/80 border-b border-stone-200/60 dark:border-stone-800/60">
+        <div class="max-w-6xl mx-auto flex justify-between items-center px-6 h-14">
+          <div class="flex items-center gap-8">
+            <%= link_to current_user.applicant? ? applicant_portal_path : dashboard_path, class: "text-xs font-semibold tracking-[0.2em] text-stone-900 dark:text-stone-100" do %>
+              LOGICALL
             <% end %>
-            <%= link_to "Profile", edit_account_user_path(current_user.account, current_user), class: "block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700" %>
-            <button type="button" data-action="click->theme#toggle" class="w-full flex items-center justify-between px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
-              <span>Dark mode</span>
-              <span class="relative inline-flex h-5 w-9 items-center rounded-full bg-gray-300 dark:bg-blue-600 transition-colors">
-                <span class="inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform translate-x-0.5 dark:translate-x-4"></span>
+            <% unless current_user.applicant? %>
+              <div class="hidden sm:flex items-center gap-1">
+                <%= link_to "Dashboard", dashboard_path, class: "text-sm px-3 py-1.5 rounded-lg text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors" %>
+                <%= link_to "Hiring", applicants_path, class: "text-sm px-3 py-1.5 rounded-lg text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors" %>
+              </div>
+            <% end %>
+          </div>
+          <div class="relative" data-controller="dropdown">
+            <button type="button" data-action="click->dropdown#toggle" class="flex items-center gap-2 text-sm text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 transition-colors">
+              <span class="w-7 h-7 rounded-full bg-violet-100 dark:bg-violet-900/40 text-violet-600 dark:text-violet-400 flex items-center justify-center text-xs font-medium">
+                <%= current_user.name&.first&.upcase %>
               </span>
+              <span class="hidden sm:inline"><%= current_user.name %></span>
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
             </button>
-            <%= link_to "Log out", logout_path, data: { turbo_method: :delete }, class: "block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700" %>
+            <div data-dropdown-target="menu" class="hidden absolute right-0 mt-2 w-52 bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-xl shadow-lg shadow-stone-200/50 dark:shadow-stone-900/50 py-1.5 z-10">
+              <div class="px-4 py-2 border-b border-stone-100 dark:border-stone-800">
+                <p class="text-xs text-stone-400 dark:text-stone-500"><%= current_user.email %></p>
+              </div>
+              <% unless current_user.applicant? %>
+                <%= link_to "Dashboard", dashboard_path, class: "block px-4 py-2 text-sm text-stone-600 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-stone-800 transition-colors sm:hidden" %>
+                <%= link_to "Hiring", applicants_path, class: "block px-4 py-2 text-sm text-stone-600 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-stone-800 transition-colors sm:hidden" %>
+              <% end %>
+              <%= link_to "Settings", settings_path, class: "block px-4 py-2 text-sm text-stone-600 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-stone-800 transition-colors" %>
+              <button type="button" data-action="click->theme#toggle" class="w-full flex items-center justify-between px-4 py-2 text-sm text-stone-600 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-stone-800 transition-colors">
+                <span>Dark mode</span>
+                <span class="relative inline-flex h-5 w-9 items-center rounded-full bg-stone-200 dark:bg-violet-600 transition-colors">
+                  <span class="inline-block h-3.5 w-3.5 transform rounded-full bg-white shadow transition-transform translate-x-0.5 dark:translate-x-[18px]"></span>
+                </span>
+              </button>
+              <div class="border-t border-stone-100 dark:border-stone-800 mt-1.5 pt-1.5">
+                <%= link_to "Log out", logout_path, data: { turbo_method: :delete }, class: "block px-4 py-2 text-sm text-stone-600 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-stone-800 transition-colors" %>
+              </div>
+            </div>
           </div>
         </div>
       </nav>
     <% end %>
 
-    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-xs p-4 z-50">
-      <% flash.each do |type, msg| %>
+    <% flash.each do |type, msg| %>
+      <div class="fixed top-4 right-4 z-50 max-w-sm animate-[fadeIn_0.2s_ease-out]">
         <% if type == 'notice' %>
-          <div class="p-4 mb-4 text-sm text-green-800 dark:text-green-200 rounded-lg bg-green-50 dark:bg-green-900" role="alert">
+          <div class="px-4 py-3 text-sm rounded-xl shadow-lg bg-emerald-50 dark:bg-emerald-900/80 text-emerald-800 dark:text-emerald-200 border border-emerald-200 dark:border-emerald-800" role="alert">
             <%= msg %>
           </div>
         <% elsif type == 'alert' %>
-          <div class="p-4 mb-4 text-sm text-red-800 dark:text-red-200 rounded-lg bg-red-50 dark:bg-red-900" role="alert">
+          <div class="px-4 py-3 text-sm rounded-xl shadow-lg bg-rose-50 dark:bg-rose-900/80 text-rose-800 dark:text-rose-200 border border-rose-200 dark:border-rose-800" role="alert">
             <%= msg %>
           </div>
         <% else %>
-           <div class="p-4 mb-4 text-sm text-blue-800 dark:text-blue-200 rounded-lg bg-blue-50 dark:bg-blue-900" role="alert">
+          <div class="px-4 py-3 text-sm rounded-xl shadow-lg bg-stone-50 dark:bg-stone-800 text-stone-800 dark:text-stone-200 border border-stone-200 dark:border-stone-700" role="alert">
             <%= msg %>
           </div>
         <% end %>
-      <% end %>
-    </div>
+      </div>
+    <% end %>
+
     <main>
       <%= yield %>
     </main>

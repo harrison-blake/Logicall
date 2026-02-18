@@ -1,31 +1,36 @@
-<div class="container mx-auto mt-8 px-5">
-  <h1 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-6">Phone Calls</h1>
-  <% if @call_transcripts.any? %>
-    <div class="bg-white dark:bg-gray-800 shadow overflow-hidden rounded-md">
-      <ul class="divide-y divide-gray-200 dark:divide-gray-700">
-        <% @call_transcripts.each do |call| %>
-          <%= link_to call_transcript_path(call), class: "block" do %>
-            <li class="px-4 py-4 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer transition-colors">
-              <div class="flex items-center justify-between">
-                <div>
-                  <p class="text-sm font-medium text-gray-900 dark:text-gray-100"><%= call.caller_phone || "Unknown caller" %></p>
-                  <p class="text-sm text-gray-500 dark:text-gray-400"><%= call.created_at.strftime("%b %d, %Y at %l:%M %p") %></p>
+<div class="px-6 py-8">
+  <div class="max-w-4xl mx-auto">
+    <h1 class="text-xl font-semibold tracking-tight text-stone-900 dark:text-stone-100 mb-6">Phone Calls</h1>
+
+    <% if @call_transcripts.any? %>
+      <div class="bg-white dark:bg-stone-900 rounded-xl shadow-sm overflow-hidden">
+        <ul class="divide-y divide-stone-100 dark:divide-stone-800">
+          <% @call_transcripts.each do |call| %>
+            <%= link_to call_transcript_path(call), class: "block" do %>
+              <li class="px-5 py-4 hover:bg-stone-50 dark:hover:bg-stone-800/50 transition-colors">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <p class="text-sm font-medium text-stone-900 dark:text-stone-100"><%= call.caller_phone || "Unknown caller" %></p>
+                    <p class="text-xs text-stone-400 dark:text-stone-500 mt-0.5 tabular-nums"><%= call.created_at.strftime("%b %d, %Y at %l:%M %p") %></p>
+                  </div>
+                  <div class="flex items-center gap-3">
+                    <% if call.call_duration %>
+                      <span class="text-xs text-stone-400 dark:text-stone-500 tabular-nums"><%= call.call_duration %>s</span>
+                    <% end %>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium <%= call.completed? ? 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400' : 'bg-rose-50 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400' %>">
+                      <%= call.status %>
+                    </span>
+                  </div>
                 </div>
-                <div class="flex items-center gap-3">
-                  <% if call.call_duration %>
-                    <span class="text-sm text-gray-500 dark:text-gray-400"><%= call.call_duration %> sec</span>
-                  <% end %>
-                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium <%= call.completed? ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200' : 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200' %>">
-                    <%= call.status %>
-                  </span>
-                </div>
-              </div>
-            </li>
+              </li>
+            <% end %>
           <% end %>
-        <% end %>
-      </ul>
-    </div>
-  <% else %>
-    <p class="text-gray-500 dark:text-gray-400">No phone calls yet.</p>
-  <% end %>
+        </ul>
+      </div>
+    <% else %>
+      <div class="text-center py-16">
+        <p class="text-sm text-stone-400 dark:text-stone-500">No phone calls yet.</p>
+      </div>
+    <% end %>
+  </div>
 </div>

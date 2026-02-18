@@ -26,22 +26,25 @@ class AccountsController < ApplicationController
 
   def update
     if @account.update(account_params)
-      redirect_to edit_account_path(@account), notice: "Account updated."
+      redirect_to settings_path(tab: "account"), notice: "Account updated."
     else
-      render :edit, status: :unprocessable_entity
+      @user = current_user
+      @default_onboarding_steps = @account.default_onboarding_steps.order(:position)
+      @tab = "account"
+      render "settings/show", status: :unprocessable_entity
     end
   end
 
   def add_default_step
     @account = current_user.account
     @account.default_onboarding_steps.create!(title: params[:title], position: @account.default_onboarding_steps.count)
-    redirect_to onboarding_settings_accounts_path
+    redirect_to settings_path(tab: "hiring")
   end
 
   def remove_default_step
     step = current_user.account.default_onboarding_steps.find(params[:id])
     step.destroy
-    redirect_to onboarding_settings_accounts_path
+    redirect_to settings_path(tab: "hiring")
   end
 
   private
