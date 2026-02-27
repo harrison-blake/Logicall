@@ -16,13 +16,15 @@ jobs:
 
       - name: Deploy to server
         uses: appleboy/ssh-action@v1.0.3
+        env:
+          RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
+          envs: RAILS_MASTER_KEY
           script: |
             set -e
-
             export PATH="$HOME/.rbenv/bin:$HOME/.rbenv/shims:$PATH"
 
             cd ~/logicall
@@ -35,12 +37,12 @@ jobs:
             bundle install
 
             echo "==> Running migrations..."
-            RAILS_ENV=production RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }} bundle exec rails db:migrate
+            RAILS_ENV=production bundle exec rails db:migrate
 
             echo "==> Precompiling assets..."
-            RAILS_ENV=production RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }} bundle exec rails assets:precompile
+            RAILS_ENV=production bundle exec rails assets:precompile
 
             echo "==> Restarting app..."
             sudo systemctl restart logicall
 
-            echo "==> Done! Deployment complete."
+            echo "==> Done!"
