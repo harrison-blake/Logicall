@@ -25,8 +25,8 @@ class AccountsController < ApplicationController
   end
 
   def update
-    if @account.update(account_params)
-      redirect_to settings_path(tab: "account"), notice: "Account updated."
+    if @account.update(safe_account_params)
+      redirect_to settings_path(tab: params.dig(:account, :gemini_api_key).present? || params.dig(:account, :auto_process_transcripts).present? ? "front_office_ai" : "account"), notice: "Account updated."
     else
       @user = current_user
       @default_onboarding_steps = @account.default_onboarding_steps.order(:position)
@@ -58,6 +58,10 @@ class AccountsController < ApplicationController
   end
 
   def account_params
-    params.require(:account).permit(:company_name, :industry, :phone_number, :email, :twilio_phone_number, :auto_process_transcripts, :default_intake_owner_id)
+    params.require(:account).permit(:company_name, :industry, :phone_number, :email, :twilio_phone_number, :auto_process_transcripts, :default_intake_owner_id, :gemini_api_key, :telnyx_api_key)
+  end
+
+  def safe_account_params
+    account_params.reject { |k, v| %w[gemini_api_key telnyx_api_key].include?(k) && v.blank? }
   end
 end

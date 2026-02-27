@@ -87,11 +87,17 @@ class GeminiClient
     }
   }.freeze
 
-  def initialize(api_key = Rails.application.credentials.dig(:gemini, :api_key))
-    @api_key = api_key
+  def initialize(account_or_key = nil)
+    @api_key = case account_or_key
+               when Account then account_or_key.resolved_gemini_key
+               when String then account_or_key
+               else Rails.application.credentials.dig(:gemini, :api_key)
+               end
   end
 
   def chat(prompt)
+    return { response: unconfigured_message, actions: [] } unless @api_key.present?
+
     if needs_tools?(prompt)
       chat_with_tools(prompt)
     else
@@ -136,6 +142,8 @@ class GeminiClient
   end
 
   def generate(prompt)
+    return nil unless @api_key.present?
+
     response = call_api([{ role: "user", parts: [{ text: prompt }] }], tools: false)
     response.dig("candidates", 0, "content", "parts", 0, "text")
   end
@@ -176,5 +184,9 @@ class GeminiClient
     tool = TOOLS[name]
     raise "Unknown function: #{name}" unless tool
     tool[:execute].call(args)
+  end
+
+  def unconfigured_message
+    "AI assistant is not configured. Add your Gemini API key in Settings → AI."
   end
 end

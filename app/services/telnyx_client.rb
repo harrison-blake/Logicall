@@ -5,8 +5,16 @@ class TelnyxClient
   BASE_URL = "https://api.telnyx.com/v2".freeze
   ELEVENLABS_SIP_URI = "sip.rtc.elevenlabs.io:5060".freeze
 
-  def initialize(api_key = Rails.application.credentials.dig(:telnyx, :api_key))
-    @api_key = api_key
+  def initialize(account_or_key = nil)
+    @api_key = case account_or_key
+               when Account then account_or_key.resolved_telnyx_key
+               when String then account_or_key
+               else Rails.application.credentials.dig(:telnyx, :api_key)
+               end
+  end
+
+  def configured?
+    @api_key.present?
   end
 
   def answer_call(call_control_id)
@@ -29,6 +37,8 @@ class TelnyxClient
   private
 
   def post(path, body)
+    raise "Telnyx is not configured. Add your Telnyx API key in Settings → Account." unless @api_key.present?
+
     uri = URI("#{BASE_URL}#{path}")
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true

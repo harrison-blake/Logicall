@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_02_11_174350) do
+ActiveRecord::Schema[8.0].define(version: 2026_02_27_015448) do
   create_table "accounts", force: :cascade do |t|
     t.string "industry"
     t.string "company_name"
@@ -22,6 +22,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_11_174350) do
     t.string "twilio_phone_number"
     t.boolean "auto_process_transcripts", default: false
     t.integer "default_intake_owner_id"
+    t.string "gemini_api_key"
+    t.string "telnyx_api_key"
     t.index ["default_intake_owner_id"], name: "index_accounts_on_default_intake_owner_id"
     t.index ["telnyx_phone_number"], name: "index_accounts_on_telnyx_phone_number", unique: true
     t.index ["twilio_phone_number"], name: "index_accounts_on_twilio_phone_number", unique: true

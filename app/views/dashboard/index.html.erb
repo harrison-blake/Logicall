@@ -43,16 +43,28 @@
     <section data-controller="chat">
       <p class="text-xs font-medium uppercase tracking-wider text-stone-400 dark:text-stone-500 mb-3">Assistant</p>
       <div class="bg-white dark:bg-stone-900 rounded-xl shadow-sm p-5">
-        <div id="chat-messages" data-chat-target="messages" class="space-y-3 mb-4 h-72 overflow-y-auto text-sm">
-          <p class="text-stone-400 dark:text-stone-500">Ask about intakes, tasks, or anything else.</p>
-        </div>
-        <%= form_with url: dashboard_chat_path, method: :post, class: "flex gap-2", data: { action: "submit->chat#submit" } do |f| %>
-          <%= f.text_field :prompt,
-              placeholder: "e.g. Create tasks for John Smith",
-              class: "flex-1 px-3.5 py-2.5 bg-stone-50 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/40 focus:border-violet-500 transition-colors",
-              autocomplete: "off",
-              data: { chat_target: "input" } %>
-          <%= f.submit "Send", class: "bg-violet-600 hover:bg-violet-700 text-white text-sm font-medium py-2.5 px-5 rounded-lg cursor-pointer transition-colors" %>
+        <% if @gemini_configured %>
+          <div id="chat-messages" data-chat-target="messages" class="space-y-3 mb-4 h-72 overflow-y-auto text-sm">
+            <p class="text-stone-400 dark:text-stone-500">Ask about intakes, tasks, or anything else.</p>
+          </div>
+          <%= form_with url: dashboard_chat_path, method: :post, class: "flex gap-2", data: { action: "submit->chat#submit" } do |f| %>
+            <%= f.text_field :prompt,
+                placeholder: "e.g. Create tasks for John Smith",
+                class: "flex-1 px-3.5 py-2.5 bg-stone-50 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/40 focus:border-violet-500 transition-colors",
+                autocomplete: "off",
+                data: { chat_target: "input" } %>
+            <%= f.submit "Send", class: "bg-violet-600 hover:bg-violet-700 text-white text-sm font-medium py-2.5 px-5 rounded-lg cursor-pointer transition-colors" %>
+          <% end %>
+        <% else %>
+          <div class="flex items-center justify-between gap-4 py-2">
+            <div>
+              <p class="text-sm font-medium text-stone-600 dark:text-stone-400">AI assistant not configured</p>
+              <p class="text-xs text-stone-400 dark:text-stone-500 mt-0.5">Add a Gemini API key to enable the assistant.</p>
+            </div>
+            <% if current_user.owner? %>
+              <%= link_to "Configure →", settings_path(tab: "front_office_ai"), class: "shrink-0 text-sm text-violet-600 hover:text-violet-700 dark:text-violet-400 dark:hover:text-violet-300 font-medium transition-colors" %>
+            <% end %>
+          </div>
         <% end %>
       </div>
     </section>

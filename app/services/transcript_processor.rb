@@ -2,11 +2,12 @@ class TranscriptProcessor
   def initialize(call_transcript)
     @call_transcript = call_transcript
     @account = call_transcript.account
-    @gemini = GeminiClient.new
+    @gemini = GeminiClient.new(@account)
   end
 
   def process
     return if @call_transcript.intake.present?
+    return unless @account.gemini_configured?
 
     transcript_text = format_transcript
     patient_info = extract_patient_info(transcript_text)

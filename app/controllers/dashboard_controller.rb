@@ -8,6 +8,7 @@ class DashboardController < ApplicationController
     @reviewed_intakes_count = Intake.reviewed.count
     @completed_tasks_count = Task.completed.count
     @call_transcripts_count = current_user.account.call_transcripts.count
+    @gemini_configured = current_user.account.gemini_configured?
   end
 
   def activity
@@ -17,7 +18,7 @@ class DashboardController < ApplicationController
 
   def chat
     @prompt = params[:prompt]
-    result = GeminiClient.new.chat(@prompt)
+    result = GeminiClient.new(current_user.account).chat(@prompt)
     @response = result[:response]
 
     @logs = result[:actions].map do |action|
